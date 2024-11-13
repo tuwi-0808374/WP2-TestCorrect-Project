@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 
-from lib.model.User import *
+from lib.model.user import *
 
 app = Flask(__name__)
 
