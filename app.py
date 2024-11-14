@@ -37,6 +37,24 @@ def edit_user(user_id):
     else:
         return "Niet ingelogd of geen admin"
 
+@app.route('/delete_user/<user_id>')
+def delete_user(user_id):
+    if check_user_is_admin():
+        user_model = User()
+        user_model.delete_user(user_id)
+        return redirect(url_for('list_user'))
+    else:
+        return "Niet ingelogd of geen admin"
+
+@app.route('/add_test_user')
+def add_test_user():
+    if check_user_is_admin():
+        user_model = User()
+        user_model.create_user("naam test1245", "pass", "display1345", "1")
+        return redirect(url_for('list_user'))
+    else:
+        return "Niet ingelogd of geen admin"
+
 def check_user_is_admin():
     session['logged_user'] = {'name': 'test', 'admin': 1}  # test
 

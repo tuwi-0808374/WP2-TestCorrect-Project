@@ -13,6 +13,14 @@ class User():
         result = self.cursor.execute("SELECT * FROM users WHERE user_id = ?", (str(user_id))).fetchone()
         return result
 
+    def create_user(self, login, password, display_name, is_admin):
+        self.cursor.execute(
+            "INSERT into users (login, password, display_name, is_admin) VALUES (?, ?, ?, ?)",
+            (login, password, display_name, is_admin))
+        self.con.commit()
+
+        return True
+
     def update_user(self, user_id, login, password, display_name, is_admin):
         self.cursor.execute(
             'UPDATE users SET login = ?, password = ?, display_name = ?, is_admin = ? WHERE user_id = ?',
@@ -21,3 +29,8 @@ class User():
         self.con.commit()
 
         return True
+
+    def delete_user(self, user_id):
+        print(user_id)
+        self.cursor.execute("DELETE FROM users WHERE user_id = ?", (str(user_id),))
+        self.con.commit()
