@@ -10,7 +10,7 @@
         {% for user in all_users %}
             <li>
                 {{user.user_id}} - {{user.login}} - {{user.password}} - {{user.display_name}} - {{user.date_created}} - {{user.is_admin}}
-                <button><a href="#">Wijzig</a></button>
+                <button><a href="/edit_user/{{user.user_id}}">Wijzig</a></button>
                 <button><a href="#">Verwijder</a></button>
             </li>
         {% endfor %}

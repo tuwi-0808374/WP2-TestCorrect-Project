@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session
+from flask import *
 
 from model.user import *
 
@@ -22,8 +22,18 @@ def list_user():
 def edit_user(user_id):
     if check_user_is_admin():
         user_model = User()
-        user = user_model.get_user(user_id)
-        return render_template("edit_user.html", user = user)
+        if request.method == 'POST':
+            display_name = request.form['display_name']
+            login = request.form['login']
+            password = request.form['password']
+            is_admin = request.form['is_admin']
+
+            update_user_status = user_model.update_user(user_id, login, password, display_name, is_admin)
+            if update_user_status:
+                return redirect(url_for('list_user'))
+        else:
+            user = user_model.get_user(user_id)
+            return render_template("edit_user.html", user = user)
     else:
         return "Niet ingelogd of geen admin"
 
