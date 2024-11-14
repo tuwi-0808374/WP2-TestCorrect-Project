@@ -12,3 +12,4 @@ class User():
     def get_user(self, user_id):
         result = self.cursor.execute("SELECT * FROM users WHERE user_id = ?", (str(user_id))).fetchone()
         return result
+

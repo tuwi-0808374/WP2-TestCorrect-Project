@@ -18,12 +18,12 @@ def list_user():
     else:
         return "Niet ingelogd of geen admin"
 
-@app.route('/edit_user')
-def edit_user():
+@app.route('/edit_user/<user_id>', methods=['GET', 'POST'])
+def edit_user(user_id):
     if check_user_is_admin():
         user_model = User()
-        all_users = user_model.get_users()
-        return render_template("edit_user.html", sin = all_users)
+        user = user_model.get_user(user_id)
+        return render_template("edit_user.html", user = user)
     else:
         return "Niet ingelogd of geen admin"
 
