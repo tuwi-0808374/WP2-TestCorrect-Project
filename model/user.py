@@ -13,3 +13,11 @@ class User():
         result = self.cursor.execute("SELECT * FROM users WHERE user_id = ?", (str(user_id))).fetchone()
         return result
 
+    def update_user(self, user_id, login, password, is_admin):
+        self.cursor.execute(
+            'UPDATE users SET login = ?, password = ?, is_admin = ? WHERE user_id = ?',
+            (login, password, is_admin, user_id)
+        )
+        self.con.commit()
+
+        return True
