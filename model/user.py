@@ -10,7 +10,7 @@ class User():
         return result
 
     def get_user(self, user_id):
-        result = self.cursor.execute("SELECT * FROM users WHERE user_id = ?", (str(user_id))).fetchone()
+        result = self.cursor.execute("SELECT * FROM users WHERE user_id = ?", (str(user_id),)).fetchone()
         return result
 
     def create_user(self, login, password, display_name, is_admin):
