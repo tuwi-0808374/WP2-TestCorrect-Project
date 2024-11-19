@@ -5,11 +5,17 @@
     <title>Title</title>
 </head>
 <body>
-        <h1>User list</h1>
+    <h1>User list</h1>
     <ul>
         {% for user in all_users %}
-            <li><a href="#">{{user.display_name}}</a></li>
+            <li>
+                {{user.user_id}} - {{user.login}} - {{user.password}} - {{user.display_name}} - {{user.date_created}} - {{user.is_admin}}
+                <button><a href="/edit_user/{{user.user_id}}">Wijzig</a></button>
+                <button><a href="/delete_user/{{user.user_id}}">Verwijder</a></button>
+            </li>
         {% endfor %}
     </ul>
+    <br>
+    <button><a href="/add_test_user">Voeg test gebruiker toe</a></button>
 </body>
 </html>
