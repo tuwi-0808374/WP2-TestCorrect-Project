@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Inloggen</title>
+    <script>
+        function myFunction() {
+  var x = document.getElementById("myInput");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}
+    </script>
+
+</head>
+
+<body>
+<form align="center" method ="get">
+        <label for="login">Email/login: </label>
+        <input type="text"><br/><br/>
+
+        <label for="password">Password: </label>
+        <input type="password" id="myInput"><br/>
+        <input type="checkbox" onclick="myFunction()">Show Password<br/><br/>
+
+        <label for="submit_login">login</label>
+        <input type="submit"><br/><br/>
+        <label for="reset">reset</label>
+        <input type="reset">
+    </form>
+</body>
+</html>
