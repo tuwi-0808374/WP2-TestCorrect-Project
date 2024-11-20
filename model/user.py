@@ -9,6 +9,11 @@ class User():
         result = self.cursor.execute('SELECT * FROM users').fetchall()
         return result
 
+    def get_login(self,login, password):
+        result = self.cursor.execute('SELECT login, password FROM users', (login, password,)).fetchone()
+        return login, password
+
+
     def get_user(self, user_id):
         result = self.cursor.execute("SELECT * FROM users WHERE user_id = ?", (str(user_id),)).fetchone()
         return result

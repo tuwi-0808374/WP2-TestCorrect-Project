@@ -1,3 +1,5 @@
+from selectors import SelectSelector
+
 from flask import *
 
 from model.user import *
@@ -17,6 +19,16 @@ def list_user():
         return render_template("user_list.html", all_users = all_users)
     else:
         return "Niet ingelogd of geen admin"
+
+@app.route('/login_screen', methods=['GET', 'POST'])
+def login_screen():
+    if request.method == "GET":
+        login = request.form['login']
+        password = request.form['password']
+        return render_template("login_screen.html", get_login = login, password = password )
+    else:
+        return "Niet ingelogd onjuist login of wachtwoord "
+
 
 @app.route('/edit_user/<user_id>', methods=['GET', 'POST'])
 def edit_user(user_id):
