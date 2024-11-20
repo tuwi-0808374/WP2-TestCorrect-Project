@@ -1,7 +1,6 @@
-
-
 from flask import *
 from flask import Flask, render_template, request
+from model.user import *
 
 app = Flask(__name__)
 app.secret_key = "geheime_sleutel"
