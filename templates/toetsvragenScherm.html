@@ -23,15 +23,82 @@
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: left;
-  background-color: #06e51d;
+  background-color: #0fae1e;
   color: white;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 52px;
+  height: 25px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(22px);
+  -ms-transform: translateX(22px);
+  transform: translateX(22px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }
 </style>
 </head>
 <body>
 <h2>Toetsvragen Lijst</h2>
 <br>
-<p>Zoekwoord [input] | Vak [drop] | Toon vragen met taxonomie [On/Off] | Ververs [button]</p>
+<p>Zoekwoord <input type="text" id="zoekWoord" name="zoekWoord"> | <label for="vak">Vak</label>
+  <select name="vak" id="vak">
+    <option value="biologie">Biologie</option>
+    <option value="engels">Engels</option>
+  </select> | Toon vragen met taxonomy <label class="switch">
+  <input type="checkbox">
+  <span class="slider round"></span>
+</label> | <button><a href="/toetsvragenScherm">Ververs</a></button></p>
 <br>
     <table id="questions">
   <tr>
@@ -52,8 +119,8 @@
         {% endfor %}
 </table>
 <br>
-<p id="pijltjes">< Vorige 10 - Volgende 10 ></p>
+<p>< Vorige 10 - Volgende 10 ></p>
 <br>
-<button id="button">Expoteer naar Test-Correct</button>
+<button>Expoteer naar Test-Correct</button>
 </body>
 </html>
