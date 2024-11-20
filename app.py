@@ -41,7 +41,6 @@ def login_screen():
     return render_template("login_screen.html")
 
 
-
 @app.route('/edit_user/<user_id>', methods=['GET', 'POST'])
 def edit_user(user_id):
     if check_user_is_admin():
