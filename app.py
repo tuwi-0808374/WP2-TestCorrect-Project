@@ -1,4 +1,4 @@
-from selectors import SelectSelector
+
 
 from flask import *
 
@@ -9,7 +9,7 @@ app.secret_key = "geheime_sleutel"
 
 @app.route('/')
 def home_page():
-    return "<p>Home Page <br></p><p><a href="'/list_users'">list users</a></p>"
+    return "<p>Home Page <br></p><p><a href="'/list_users'">list users</a></p> <br><p><a href="'/toetsvragenScherm'">toetsvragenScherm</a></p>"
 
 @app.route('/list_users')
 def list_user():
@@ -17,6 +17,15 @@ def list_user():
         user_model = User()
         all_users = user_model.get_users()
         return render_template("user_list.html", all_users = all_users)
+    else:
+        return "Niet ingelogd of geen admin"
+
+@app.route('/toetsvragenScherm')
+def toetsvragenScherm():
+    if check_user_is_admin():
+        user_model = User()
+        all_users = user_model.get_users()
+        return render_template("/toetsvragenScherm.html")
     else:
         return "Niet ingelogd of geen admin"
 
