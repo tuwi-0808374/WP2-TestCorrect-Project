@@ -2,6 +2,7 @@ from selectors import SelectSelector
 
 from flask import *
 
+from model.import_database import insert_upload_to_database
 from model.user import *
 
 app = Flask(__name__)
@@ -66,6 +67,61 @@ def add_test_user():
         return redirect(url_for('list_user'))
     else:
         return "Niet ingelogd of geen admin"
+
+# Import page & functions 
+
+required_keys = [
+    "question_id",
+    "question",
+    "answer",
+    "vak",
+    "onderwijsniveau",
+    "leerjaar",
+    "question_index"
+]
+
+@app.route('/import')
+def import_page():
+   return render_template('import_screen.html')
+
+@app.route('/import', methods=['POST'])
+def import_json():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file uploaded'}), 400
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return jsonify({'error': 'No file selected'}), 400
+
+    try:
+        json_data = json.load(file)
+
+        errors = []
+    
+        for index, item in enumerate(json_data):
+            missing_or_invalid = []
+            
+            for key in required_keys:
+
+                if key not in item or item[key] in [None, ""]:
+                    missing_or_invalid.append(key)
+            
+            if missing_or_invalid:
+                errors.append({
+                    "item_index": index,
+                    "missing_or_invalid_keys": missing_or_invalid
+                })
+
+        if errors is not []:
+            return jsonify({'error': True, 'JSON File heeft missende keys': errors})
+        else:
+            insert_upload_to_database(json_data)
+            return jsonify({'error': True, 'Test?': errors})
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
+    
 
 def check_user_is_admin():
     session['logged_user'] = {'name': 'test', 'admin': 1}  # test
