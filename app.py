@@ -1,15 +1,14 @@
 from selectors import SelectSelector
 
 from flask import *
-
-from model.user import *
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 app.secret_key = "geheime_sleutel"
 
 @app.route('/')
 def home_page():
-    return "<p>Home Page <br></p><p><a href="'/list_users'">list users</a></p>"
+    return "<p>Home Page <br></p><p><a href="'/list_users'">list users</a><br> <a href="'/login_screen'">login</a>  </p>"
 
 @app.route('/list_users')
 def list_user():
@@ -22,12 +21,25 @@ def list_user():
 
 @app.route('/login_screen', methods=['GET', 'POST'])
 def login_screen():
-    if request.method == "GET":
+
+    if request.method == "POST":
+        #Get login from form
         login = request.form['login']
-        password = request.form['password']
-        return render_template("login_screen.html", get_login = login, password = password )
-    else:
-        return "Niet ingelogd onjuist login of wachtwoord "
+        password = request.form["password"]
+        print(login, password)
+
+        #basic validation
+        if not login or not password:
+            return "Login or password missing. Please fill in all fields."
+
+        #placeholder
+        if login == "admin" and password == "admin":
+            return render_template ( "user_list.html",user=login)
+        else:
+            return "Incorrect login or password, please try again."
+
+    return render_template("login_screen.html")
+
 
 
 @app.route('/edit_user/<user_id>', methods=['GET', 'POST'])
