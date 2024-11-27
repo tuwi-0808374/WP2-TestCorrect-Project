@@ -1,7 +1,4 @@
-from selectors import SelectSelector
-
 from flask import *
-
 from model.import_database import insert_upload_to_database
 from model.user import *
 
@@ -10,7 +7,8 @@ app.secret_key = "geheime_sleutel"
 
 @app.route('/')
 def home_page():
-    return "<p>Home Page <br></p><p><a href="'/list_users'">list users</a></p>"
+    return "<p>Home Page <br></p><p><a href="'/login_screen'">login</a><br> <a href="'/list_users'">list users</a></p> <br><p><a href="'/toetsvragenScherm'">toetsvragenScherm</a></p>"
+
 
 @app.route('/list_users')
 def list_user():
@@ -21,14 +19,35 @@ def list_user():
     else:
         return "Niet ingelogd of geen admin"
 
+@app.route('/toetsvragenScherm')
+def toetsvragenScherm():
+    if check_user_is_admin():
+        user_model = User()
+        all_users = user_model.get_users()
+        return render_template("/toetsvragenScherm.html")
+    else:
+        return "Niet ingelogd of geen admin"
+
 @app.route('/login_screen', methods=['GET', 'POST'])
 def login_screen():
-    if request.method == "GET":
+
+    if request.method == "POST":
+        #Get login from form
         login = request.form['login']
-        password = request.form['password']
-        return render_template("login_screen.html", get_login = login, password = password )
-    else:
-        return "Niet ingelogd onjuist login of wachtwoord "
+        password = request.form["password"]
+        print(login, password)
+
+        #basic validation
+        if not login or not password:
+            return "Login or password missing. Please fill in all fields."
+
+        #placeholder
+        if login == "admin" and password == "admin":
+            return render_template ( "user_list.html",user=login)
+        else:
+            return "Incorrect login or password, please try again."
+
+    return render_template("login_screen.html")
 
 
 @app.route('/edit_user/<user_id>', methods=['GET', 'POST'])
