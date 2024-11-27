@@ -1,5 +1,6 @@
 from flask import *
 from model.import_database import insert_upload_to_database
+from model.toetsvragen import Toetsvragen
 from model.user import *
 
 app = Flask(__name__)
@@ -22,9 +23,9 @@ def list_user():
 @app.route('/toetsvragenScherm')
 def toetsvragenScherm():
     if check_user_is_admin():
-        user_model = User()
-        all_users = user_model.get_users()
-        return render_template("/toetsvragenScherm.html")
+        toetsvragen_model = Toetsvragen()
+        all_questions = toetsvragen_model.getToetsvragen()
+        return render_template("/toetsvragenScherm.html", all_questions = all_questions)
     else:
         return "Niet ingelogd of geen admin"
 

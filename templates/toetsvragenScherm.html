@@ -109,13 +109,13 @@ input:checked + .slider:before {
       <th>Exported</th>
       <th>Date_created</th>
   </tr>
-        {% for question in questions %}
+        {% for question in all_questions %}
   <tr>
-    <td>{{questions.question}}</td>
-    <td>{{questions.taxonomy_bloom}}</td>
-      <td>{{questions.rtti}}</td>
-      <td>{{questions.exported}}</td>
-      <td>{{questions.date_created}}</td>
+    <td>{{question.question}}</td>
+    <td>{{question.taxonomy_bloom}}</td>
+      <td>{{question.rtti}}</td>
+      <td>{{question.exported}}</td>
+      <td>{{question.date_created}}</td>
   </tr>
         {% endfor %}
 </table>
