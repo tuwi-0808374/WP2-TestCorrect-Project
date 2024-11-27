@@ -133,10 +133,11 @@ def import_json():
                 })
 
         if errors is not []:
+            insert_upload_to_database(json_data)
             return jsonify({'error': True, 'JSON File heeft missende keys': errors})
         else:
-            insert_upload_to_database(json_data)
-            return jsonify({'error': True, 'Test?': errors})
+            # Add function to fix missing keys to questions
+            return jsonify({'error': True, 'JSON File heeft missende keys': errors})
     
     except Exception as e:
         return jsonify({'error': str(e)}), 400
