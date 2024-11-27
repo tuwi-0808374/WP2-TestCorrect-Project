@@ -69,6 +69,24 @@ def edit_user(user_id):
     else:
         return "Niet ingelogd of geen admin"
 
+@app.route('/add_user', methods=['GET', 'POST'])
+def add_user():
+    if check_user_is_admin():
+        user_model = User()
+        if request.method == 'POST':
+            display_name = request.form['display_name']
+            login = request.form['login']
+            password = request.form['password']
+            is_admin = request.form['is_admin']
+
+            create_user_status = user_model.create_user(login, password, display_name, is_admin)
+            if create_user_status:
+                return redirect(url_for('list_user'))
+        else:
+            return render_template("add_user.html")
+    else:
+        return "Niet ingelogd of geen admin"
+
 @app.route('/delete_user/<user_id>')
 def delete_user(user_id):
     if check_user_is_admin():
