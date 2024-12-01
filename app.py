@@ -1,6 +1,8 @@
+
 from flask import *
 from model.import_database import insert_upload_to_database
 from model.user import *
+from model.export_vragen import *
 
 app = Flask(__name__)
 app.secret_key = "geheime_sleutel"
@@ -170,6 +172,15 @@ def check_user_is_admin():
         return False
 
     return True
+
+@app.route('/export_vragen')
+def export_vragen():
+    return export_alle_vragen(False)
+
+@app.route('/export_vragen_save')
+def export_vragen_save():
+    return export_alle_vragen(True)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
