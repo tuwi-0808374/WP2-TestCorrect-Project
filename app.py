@@ -1,3 +1,4 @@
+
 from flask import *
 from model.import_database import insert_upload_to_database
 from model.user import *
@@ -174,7 +175,12 @@ def check_user_is_admin():
 
 @app.route('/export_vragen')
 def export_vragen():
-    export_alle_vragen()
+    return export_alle_vragen(False)
+
+@app.route('/export_vragen_save')
+def export_vragen_save():
+    return export_alle_vragen(True)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
