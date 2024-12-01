@@ -4,7 +4,7 @@ from flask import jsonify
 def export_alle_vragen(save):
     database = Database('./databases/database.db')
     cursor, conn = database.connect_db()
-    select_query = "SELECT questions_id, prompts_id, user_id, question, taxonomy_bloom, rtti, date_created FROM questions"
+    select_query = "SELECT questions_id, prompts_id, user_id, question, taxonomy_bloom, rtti, exported, date_created FROM questions"
 
     cursor.execute(select_query)
     rows = cursor.fetchall()
@@ -13,9 +13,12 @@ def export_alle_vragen(save):
     for row in rows:
         dictionary = {}
         dictionary['questions_id'] = row['questions_id']
+        dictionary['prompts_id'] = row['prompts_id']
         dictionary['question'] = row['question']
         dictionary['taxonomy_bloom'] = row['taxonomy_bloom']
         dictionary['rtti'] = row['rtti']
+        dictionary['exported'] = row['exported']
+        dictionary['date_created'] = row['date_created']
         data.append(dictionary)
 
     response = jsonify(data)
