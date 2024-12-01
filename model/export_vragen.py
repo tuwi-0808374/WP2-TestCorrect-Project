@@ -20,6 +20,10 @@ def export_alle_vragen(save):
 
     response = jsonify(data)
 
+    if save:
+        response.headers["Content-Disposition"] = "attachment; filename=questions.json"
+        response.headers["Content-Type"] = "application/json"
+
     return response
 
 
