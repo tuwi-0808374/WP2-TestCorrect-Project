@@ -1,6 +1,6 @@
 
 from flask import *
-from model.import_database import insert_upload_to_database
+from model.import_database import insert_upload_to_database, get_questions
 from model.user import *
 from model.export_vragen import *
 
@@ -128,13 +128,13 @@ def import_json():
     if 'file' not in request.files:
         return jsonify({'error': 'No file uploaded'}), 400
 
-    file = request.files['file']
+    json_file = request.files['file']
 
-    if file.filename == '':
+    if json_file.filename == '':
         return jsonify({'error': 'No file selected'}), 400
 
     try:
-        json_data = json.load(file)
+        json_data = json.load(json_file)
 
         errors = []
     
@@ -142,22 +142,35 @@ def import_json():
             missing_or_invalid = []
             
             for key in required_keys:
-
                 if key not in item or item[key] in [None, ""]:
                     missing_or_invalid.append(key)
             
             if missing_or_invalid:
                 errors.append({
                     "item_index": index,
-                    "missing_or_invalid_keys": missing_or_invalid
+                    "error": 'Invalid keys in json item'
                 })
 
-        if errors is not []:
+            questions = get_questions()
+
+            for id in questions:
+                if item['question_id'] == id:
+                    errors.append({
+                        "item_index": index,
+                        "error": 'Question already exists ' + str(id)
+                    })
+
+
+        if not errors:
             insert_upload_to_database(json_data)
-            return jsonify({'error': True, 'JSON File heeft missende keys': errors})
+            return jsonify({'error': False, 'message': 'Data successfully uploaded!'})
         else:
             # Add function to fix missing keys to questions
-            return jsonify({'error': True, 'JSON File heeft missende keys': errors})
+            return jsonify({
+                'error': True,
+                'message': 'JSON File heeft missende keys.',
+                'details': errors
+            }), 400
     
     except Exception as e:
         return jsonify({'error': str(e)}), 400
