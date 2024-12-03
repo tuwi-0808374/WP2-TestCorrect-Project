@@ -137,6 +137,7 @@ def import_json():
         json_data = json.load(json_file)
 
         errors = []
+        filtered_data = []
     
         for index, item in enumerate(json_data):
             missing_or_invalid = []
@@ -148,10 +149,12 @@ def import_json():
             if missing_or_invalid:
                 errors.append({
                     "item_index": index,
-                    "error": 'Invalid keys in json item'
+                    "error": 'Invalid keys in json item: ' + ', '.join(missing_or_invalid)
                 })
+                continue
 
             questions = get_questions()
+            duplicate = False
 
             for id in questions:
                 if item['question_id'] == id:
@@ -159,16 +162,21 @@ def import_json():
                         "item_index": index,
                         "error": 'Question already exists ' + str(id)
                     })
+                    duplicate = True
+
+            if not duplicate:
+                filtered_data.append(item)
 
 
         if not errors:
-            insert_upload_to_database(json_data)
+            insert_upload_to_database(filtered_data)
             return jsonify({'error': False, 'message': 'Data successfully uploaded!'})
         else:
             # Add function to fix missing keys to questions
+
             return jsonify({
                 'error': True,
-                'message': 'JSON File heeft missende keys.',
+                'message': 'JSON file error',
                 'details': errors
             }), 400
     
