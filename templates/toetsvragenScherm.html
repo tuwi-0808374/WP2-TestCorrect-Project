@@ -101,7 +101,7 @@ input:checked + .slider:before {
   <span class="slider round"></span>
 </label> | <button><a href="/toetsvragenScherm">Ververs</a></button></p>
 <br>
-    <table id="questions">
+<table id="questions">
   <tr>
       <th>Question</th>
       <th>Taxonomy_bloom</th>
@@ -109,7 +109,7 @@ input:checked + .slider:before {
       <th>Exported</th>
       <th>Date_created</th>
   </tr>
-        {% for question in all_questions %}
+  {% for question in all_questions %}
   <tr>
     <td>{{question.question}}</td>
     <td>{{question.taxonomy_bloom}}</td>
@@ -117,10 +117,24 @@ input:checked + .slider:before {
       <td>{{question.exported}}</td>
       <td>{{question.date_created}}</td>
   </tr>
-        {% endfor %}
+  {% endfor %}
 </table>
 <br>
-<p>< Vorige 10 - Volgende 10 ></p>
+<p>
+  {% if has_previous %}
+    <a href="?page={{ page - 1 }}">&#x3C; Vorige 10</a>
+  {% else %}
+    &#x3C; Vorige 10
+  {% endif %}
+
+  -
+
+  {% if has_next %}
+    <a href="?page={{ page + 1 }}">Volgende 10 &#x3E;</a>
+  {% else %}
+    Volgende 10 &#x3E;
+  {% endif %}
+</p>
 <br>
 <button>Expoteer naar Test-Correct</button>
 </body>

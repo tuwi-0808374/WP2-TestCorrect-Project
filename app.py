@@ -23,9 +23,28 @@ def list_user():
 @app.route('/toetsvragenScherm')
 def toetsvragenScherm():
     if check_user_is_admin():
+        # Get the current page from the query parameters, default to 1
+        page = int(request.args.get('page', 1))
+        limit = 10
+        start = (page - 1) * limit
+
+        # Initialize the model and fetch data for the current page
         toetsvragen_model = Toetsvragen()
-        all_questions = toetsvragen_model.getToetsvragen()
-        return render_template("/toetsvragenScherm.html", all_questions = all_questions)
+        all_questions = toetsvragen_model.getToetsvragen(start=start, limit=limit)
+        total_questions = toetsvragen_model.getTotalQuestions()
+
+        # Determine if there are previous or next pages
+        has_previous = start > 0
+        has_next = start + limit < total_questions
+
+        # Pass pagination data and questions to the template
+        return render_template(
+            "toetsvragenScherm.html",
+            all_questions=all_questions,
+            page=page,
+            has_previous=has_previous,
+            has_next=has_next
+        )
     else:
         return "Niet ingelogd of geen admin"
 
