@@ -107,17 +107,7 @@ def add_test_user():
     else:
         return "Niet ingelogd of geen admin"
 
-# Import page & functions 
-
-required_keys = [
-    "question_id",
-    "question",
-    "answer",
-    "vak",
-    "onderwijsniveau",
-    "leerjaar",
-    "question_index"
-]
+# Import page & functions
 
 @app.route('/import')
 def import_page():
@@ -133,9 +123,11 @@ def import_json():
     if json_file.filename == '':
         return jsonify({'error': 'No file selected'}), 400
 
-    try:
-        json_data = json.load(json_file)
+    json_data = json.load(json_file)
 
+    insert_upload_to_database(json_data)
+
+    try:
         errors = []
         filtered_data = []
     
