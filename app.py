@@ -1,4 +1,3 @@
-
 from flask import *
 from model.import_database import insert_upload_to_database, get_questions
 from model.user import *
@@ -6,6 +5,7 @@ from model.export_vragen import *
 
 app = Flask(__name__)
 app.secret_key = "geheime_sleutel"
+
 
 @app.route('/')
 def home_page():
@@ -17,9 +17,10 @@ def list_user():
     if check_user_is_admin():
         user_model = User()
         all_users = user_model.get_users()
-        return render_template("user_list.html", all_users = all_users)
+        return render_template("user_list.html", all_users=all_users)
     else:
         return "Niet ingelogd of geen admin"
+
 
 @app.route('/toetsvragenScherm')
 def toetsvragenScherm():
@@ -30,9 +31,9 @@ def toetsvragenScherm():
     else:
         return "Niet ingelogd of geen admin"
 
+
 @app.route('/login_screen', methods=['GET', 'POST'])
 def login_screen():
-
     if request.method == "POST":
         #Get login from form
         login = request.form['login']
@@ -45,7 +46,7 @@ def login_screen():
 
         #placeholder
         if login == "admin" and password == "admin":
-            return render_template ( "user_list.html",user=login)
+            return render_template("user_list.html", user=login)
         else:
             return "Incorrect login or password, please try again."
 
@@ -67,9 +68,10 @@ def edit_user(user_id):
                 return redirect(url_for('list_user'))
         else:
             user = user_model.get_user(user_id)
-            return render_template("edit_user.html", user = user)
+            return render_template("edit_user.html", user=user)
     else:
         return "Niet ingelogd of geen admin"
+
 
 @app.route('/add_user', methods=['GET', 'POST'])
 def add_user():
@@ -89,6 +91,7 @@ def add_user():
     else:
         return "Niet ingelogd of geen admin"
 
+
 @app.route('/delete_user/<user_id>')
 def delete_user(user_id):
     if check_user_is_admin():
@@ -97,6 +100,7 @@ def delete_user(user_id):
         return redirect(url_for('list_user'))
     else:
         return "Niet ingelogd of geen admin"
+
 
 @app.route('/add_test_user')
 def add_test_user():
@@ -107,11 +111,13 @@ def add_test_user():
     else:
         return "Niet ingelogd of geen admin"
 
+
 # Import page & functions
 
 @app.route('/import')
 def import_page():
-   return render_template('import_screen.html')
+    return render_template('import_screen.html')
+
 
 @app.route('/import', methods=['POST'])
 def import_json():
@@ -138,9 +144,11 @@ def check_user_is_admin():
 
     return True
 
+
 @app.route('/export_vragen')
 def export_vragen():
     return export_alle_vragen(False)
+
 
 @app.route('/export_vragen_save')
 def export_vragen_save():
@@ -152,12 +160,21 @@ if __name__ == "__main__":
 
 import sqlite3
 
+
 def get_db_connection():
     conn = sqlite3.connect('database.db')
     conn.row_factory = sqlite3.Row
     return conn
 
+
 @app.route('/list_data')
 def list_data():
     conn = get_db_connection()
     cursor = conn.cursor()
+
+    # Example query
+    cursor.execute('SELECT * FROM users')
+    rows = cursor.fetchall()
+
+    conn.close()  # Always close the connection after use
+    return render_template('list_data.html', rows=rows)
