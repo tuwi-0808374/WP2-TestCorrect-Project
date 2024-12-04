@@ -178,3 +178,15 @@ def list_data():
 
     conn.close()  # Always close the connection after use
     return render_template('list_data.html', rows=rows)
+
+@app.route('/add_data', methods=['POST'])
+def add_data(value1=None, value2=None):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute('INSERT INTO users (login, password) VALUES (?, ?)', (value1, value2))
+    conn.commit()  # Save the changes
+
+    conn.close()
+    return redirect(url_for('list_data'))
+
