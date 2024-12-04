@@ -1,5 +1,6 @@
 from model.database import Database
 
+
 class User():
     def __init__(self):
         database = Database('./databases/database.db')
@@ -9,9 +10,16 @@ class User():
         result = self.cursor.execute('SELECT * FROM users').fetchall()
         return result
 
-    def get_login(self,login, password):
-        result = self.cursor.execute('SELECT login, password FROM users', (login, password,)).fetchone()
-        return login, password
+    def login_user(self, login, password):
+        login_query = 'SELECT 1 FROM users WHERE login = ?LIMIT 1'
+        ##hash passwords????
+        result = self.cursor.execute(login_query, (login,)).fetchone()
+        if result:
+            stored_password = result[0]
+            if password == stored_password:
+                return True
+
+        return False #login fail
 
 
     def get_user(self, user_id):

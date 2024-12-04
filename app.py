@@ -1,7 +1,8 @@
 
 
 from flask import *
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
+from flask_login import login_user
 
 app = Flask(__name__)
 app.secret_key = "geheime_sleutel"
@@ -31,19 +32,15 @@ def toetsvragenScherm():
 
 @app.route('/login_screen', methods=['GET', 'POST'])
 def login_screen():
-
     if request.method == "POST":
-        #Get login from form
-        login = request.form['login']
+        login = request.form["login"]
         password = request.form["password"]
-        print(login, password)
-
         #basic validation
         if not login or not password:
             return "Login or password missing. Please fill in all fields."
 
-        #placeholder
-        if login == "admin" and password == "admin":
+        if user_model.login_user():
+            login_user(login, password)
             return render_template ( "user_list.html",user=login)
         else:
             return "Incorrect login or password, please try again."
