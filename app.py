@@ -161,4 +161,3 @@ def get_db_connection():
 def list_data():
     conn = get_db_connection()
     cursor = conn.cursor()
-
