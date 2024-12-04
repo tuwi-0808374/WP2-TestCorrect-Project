@@ -180,7 +180,7 @@ def list_data():
     return render_template('list_data.html', rows=rows)
 
 @app.route('/add_data', methods=['POST'])
-def add_data(value1=None, value2=None):
+def add_data(value1=None, value2=1):
     conn = get_db_connection()
     cursor = conn.cursor()
 
