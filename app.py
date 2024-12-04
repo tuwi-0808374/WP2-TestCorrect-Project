@@ -20,30 +20,35 @@ def list_user():
     else:
         return "Niet ingelogd of geen admin"
 
-@app.route('/toetsvragenScherm')
+
+@app.route('/toetsvragenScherm', methods=['GET'])
 def toetsvragenScherm():
     if check_user_is_admin():
-        # Get the current page from the query parameters, default to 1
-        page = int(request.args.get('page', 1))
+        # Verkrijg de queryparameters
+        page = int(request.args.get('page', 1))  # De huidige pagina (standaard 1)
+        zoekwoord = request.args.get('zoekWoord', '')  # Haal het zoekwoord op, standaard is het leeg
         limit = 10
         start = (page - 1) * limit
 
-        # Initialize the model and fetch data for the current page
+        # Initialiseer het model
         toetsvragen_model = Toetsvragen()
-        all_questions = toetsvragen_model.getToetsvragen(start=start, limit=limit)
-        total_questions = toetsvragen_model.getTotalQuestions()
 
-        # Determine if there are previous or next pages
+        # Verkrijg de gefilterde of gepagineerde vragen
+        all_questions = toetsvragen_model.getToetsvragen(start=start, limit=limit, search=zoekwoord)
+        total_questions = toetsvragen_model.getTotalQuestions(search=zoekwoord)
+
+        # Bepaal of er vorige of volgende pagina's zijn
         has_previous = start > 0
         has_next = start + limit < total_questions
 
-        # Pass pagination data and questions to the template
+        # Geef de data door aan de template
         return render_template(
             "toetsvragenScherm.html",
             all_questions=all_questions,
             page=page,
             has_previous=has_previous,
-            has_next=has_next
+            has_next=has_next,
+            zoekwoord=zoekwoord  # Het zoekwoord wordt meegegeven aan de template
         )
     else:
         return "Niet ingelogd of geen admin"

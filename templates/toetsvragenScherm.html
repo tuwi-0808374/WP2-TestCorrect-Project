@@ -91,7 +91,16 @@ input:checked + .slider:before {
 <body>
 <h2>Toetsvragen Lijst</h2>
 <br>
-<p>Zoekwoord <input type="text" id="zoekWoord" name="zoekWoord"> | <label for="vak">Vak</label>
+<form method="get" action="/toetsvragenScherm" id="searchForm">
+  Zoekwoord <input
+    type="text"
+    id="zoekWoord"
+    name="zoekWoord"
+    value="{{ zoekwoord|default('') }}"
+    placeholder="Zoek een vraag..."
+    autocomplete="off"
+  >
+</form> | <label for="vak">Vak</label>
   <select name="vak" id="vak">
     <option value="biologie">Biologie</option>
     <option value="engels">Engels</option>
@@ -122,7 +131,7 @@ input:checked + .slider:before {
 <br>
 <p>
   {% if has_previous %}
-    <a href="?page={{ page - 1 }}">&#x3C; Vorige 10</a>
+    <a href="?page={{ page - 1 }}&zoekWoord={{ zoekwoord }}&vak={{ vak }}">&#x3C; Vorige 10</a>
   {% else %}
     &#x3C; Vorige 10
   {% endif %}
@@ -130,12 +139,33 @@ input:checked + .slider:before {
   -
 
   {% if has_next %}
-    <a href="?page={{ page + 1 }}">Volgende 10 &#x3E;</a>
+    <a href="?page={{ page + 1 }}&zoekWoord={{ zoekwoord }}&vak={{ vak }}">Volgende 10 &#x3E;</a>
   {% else %}
     Volgende 10 &#x3E;
   {% endif %}
 </p>
+
 <br>
 <button>Expoteer naar Test-Correct</button>
+
+<scr<script>
+  const zoekWoordInput = document.getElementById('zoekWoord');
+  const vakSelect = document.getElementById('vak');
+  const searchForm = document.getElementById('searchForm');
+  let timeout = null;
+
+  // Listen for input changes
+  zoekWoordInput.addEventListener('input', () => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      searchForm.submit(); // Automatically submit the form
+    }, 500);
+  });
+
+  // Listen for changes in the select dropdown
+  vakSelect.addEventListener('change', () => {
+    searchForm.submit(); // Automatically submit the form when a vak is selected
+  });
+</script>
 </body>
 </html>
