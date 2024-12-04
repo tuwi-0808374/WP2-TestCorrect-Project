@@ -125,54 +125,8 @@ def import_json():
 
     json_data = json.load(json_file)
 
-    insert_upload_to_database(json_data)
+    return insert_upload_to_database(json_data)
 
-    try:
-        errors = []
-        filtered_data = []
-    
-        for index, item in enumerate(json_data):
-            missing_or_invalid = []
-            
-            for key in required_keys:
-                if key not in item or item[key] in [None, ""]:
-                    missing_or_invalid.append(key)
-            
-            if missing_or_invalid:
-                errors.append({
-                    "item_index": index,
-                    "error": 'Invalid keys in json item: ' + ', '.join(missing_or_invalid)
-                })
-                continue
-
-            questions = get_questions()
-            duplicate = False
-
-            if item['question_id'] in questions:
-                errors.append({
-                    "item_index": index,
-                    "error": 'Question already exists ' + str(id)
-                })
-                duplicate = True
-
-            if not duplicate:
-                filtered_data.append(item)
-
-        if not errors:
-            insert_upload_to_database(filtered_data)
-            return jsonify({'error': False, 'message': 'Data successfully uploaded!'})
-        else:
-            # Add function to fix missing keys to questions
-
-            return jsonify({
-                'error': True,
-                'message': 'JSON file error',
-                'details': errors
-            }), 400
-    
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
-    
 
 def check_user_is_admin():
     session['logged_user'] = {'name': 'test', 'admin': 1}  # test
