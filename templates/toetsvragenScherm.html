@@ -131,7 +131,7 @@ input:checked + .slider:before {
 <br>
 <p>
   {% if has_previous %}
-    <a href="?page={{ page - 1 }}&zoekWoord={{ zoekwoord }}&vak={{ vak }}">&#x3C; Vorige 10</a>
+    <a href="?page={{ page - 1 }}&zoekWoord={{ zoekwoord }}">&#x3C; Vorige 10</a>
   {% else %}
     &#x3C; Vorige 10
   {% endif %}
@@ -139,7 +139,7 @@ input:checked + .slider:before {
   -
 
   {% if has_next %}
-    <a href="?page={{ page + 1 }}&zoekWoord={{ zoekwoord }}&vak={{ vak }}">Volgende 10 &#x3E;</a>
+    <a href="?page={{ page + 1 }}&zoekWoord={{ zoekwoord }}">Volgende 10 &#x3E;</a>
   {% else %}
     Volgende 10 &#x3E;
   {% endif %}
