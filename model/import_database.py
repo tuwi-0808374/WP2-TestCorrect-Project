@@ -19,6 +19,7 @@ def insert_upload_to_database(data):
         for index, item in enumerate(data):
             missing_or_invalid = []
 
+            # Check for missing or invalid required keys
             for key in required_keys:
                 if key not in item or item[key] in [None, ""]:
                     missing_or_invalid.append(key)
@@ -26,17 +27,18 @@ def insert_upload_to_database(data):
             if missing_or_invalid:
                 errors.append({
                     "item_index": index,
-                    "error": 'Invalid keys in json item: ' + ', '.join(missing_or_invalid)
+                    "error": 'Invalid keys in JSON item: ' + ', '.join(missing_or_invalid)
                 })
                 continue
 
+            # Get all question id's from database
             questions = get_questions()
             duplicate = False
 
             if item['question_id'] in questions:
                 errors.append({
                     "item_index": index,
-                    "error": 'Question already exists ' + str(id)
+                    "error": 'Question already exists with ID ' + str(item['question_id'])
                 })
                 duplicate = True
 
@@ -49,7 +51,8 @@ def insert_upload_to_database(data):
 
             insert_query = "INSERT INTO questions (questions_id, prompts_id, user_id, question, date_created) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)"
 
-            for item in data:
+            # Insert each valid item into the database
+            for item in filtered_data:
                 questions_id = item.get("question_id")
                 prompts_id = 0
                 user_id = '1234'  # PLACEHOLDER EXAMPLE
@@ -67,13 +70,13 @@ def insert_upload_to_database(data):
 
             return jsonify({'error': False, 'message': 'Data successfully uploaded!'})
         else:
-            # Add function to fix missing keys to questions
-
+            # Return errors for invalid keys or duplicates
             return jsonify({
                 'error': True,
                 'message': 'JSON file error',
                 'details': errors
             }), 400
+
 
 def get_questions():
     database = Database('./databases/database.db')
