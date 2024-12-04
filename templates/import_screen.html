@@ -18,8 +18,10 @@
             const fileInput = document.getElementById('jsonFile');
             const file = fileInput.files[0];
 
+            let outputDiv =  document.getElementById('output')
+
             if (!file) {
-                document.getElementById('output').innerHTML = "Geen file gevonden.";
+               outputDiv.innerHTML = "Geen file gevonden.";
                 return;
             }
 
@@ -33,10 +35,37 @@
             .then(response => response.json())
             .then(data => {
                 if (data.error) {
-                    document.getElementById('output').innerHTML = "Error: " + data.error;
+                    console.log(data)
+
+                    let tableHTML = `
+                        <table border="1" style="border-collapse: collapse; width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>Question ID</th>
+                                    <th>Error</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+
+                    // Loop through the errors in data.details
+                    data.details.forEach(detail => {
+                        tableHTML += `
+                            <tr>
+                                <td>${detail.question_id || 'N/A'}</td>
+                                <td>${detail.error}</td>
+                            </tr>
+                        `;
+                    });
+
+                    tableHTML += `
+                            </tbody>
+                        </table>
+                    `;
+
+                    outputDiv.innerHTML = tableHTML;
                 } else {
-                    document.getElementById('output').innerHTML = 
-                        "Processed Data: " + JSON.stringify(data.data);
+                    outputDiv.innerHTML = "Successful";
                 }
             })
             .catch(error => {

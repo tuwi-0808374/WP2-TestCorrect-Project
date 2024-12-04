@@ -26,7 +26,7 @@ def insert_upload_to_database(data):
 
             if missing_or_invalid:
                 errors.append({
-                    "item_index": index,
+                    "question_id": item["question_id"] or index,
                     "error": 'Invalid keys in JSON item: ' + ', '.join(missing_or_invalid)
                 })
                 continue
@@ -37,7 +37,7 @@ def insert_upload_to_database(data):
 
             if item['question_id'] in questions:
                 errors.append({
-                    "item_index": index,
+                    "question_id": item['question_id'],
                     "error": 'Question already exists with ID ' + str(item['question_id'])
                 })
                 duplicate = True
