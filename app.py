@@ -156,17 +156,15 @@ def import_json():
             questions = get_questions()
             duplicate = False
 
-            for id in questions:
-                if item['question_id'] == id:
-                    errors.append({
-                        "item_index": index,
-                        "error": 'Question already exists ' + str(id)
-                    })
-                    duplicate = True
+            if item['question_id'] in questions:
+                errors.append({
+                    "item_index": index,
+                    "error": 'Question already exists ' + str(id)
+                })
+                duplicate = True
 
             if not duplicate:
                 filtered_data.append(item)
-
 
         if not errors:
             insert_upload_to_database(filtered_data)
