@@ -1,8 +1,8 @@
 
-
 from flask import *
-from flask import Flask, render_template, request, session
-from flask_login import login_user
+from model.import_database import insert_upload_to_database, get_questions
+from model.user import *
+from model.export_vragen import *
 
 app = Flask(__name__)
 app.secret_key = "geheime_sleutel"
@@ -32,15 +32,19 @@ def toetsvragenScherm():
 
 @app.route('/login_screen', methods=['GET', 'POST'])
 def login_screen():
+
     if request.method == "POST":
-        login = request.form["login"]
+        #Get login from form
+        login = request.form['login']
         password = request.form["password"]
+        print(login, password)
+
         #basic validation
         if not login or not password:
             return "Login or password missing. Please fill in all fields."
 
-        if user_model.login_user():
-            login_user(login, password)
+        #placeholder
+        if login == "admin" and password == "admin":
             return render_template ( "user_list.html",user=login)
         else:
             return "Incorrect login or password, please try again."
@@ -67,6 +71,24 @@ def edit_user(user_id):
     else:
         return "Niet ingelogd of geen admin"
 
+@app.route('/add_user', methods=['GET', 'POST'])
+def add_user():
+    if check_user_is_admin():
+        user_model = User()
+        if request.method == 'POST':
+            display_name = request.form['display_name']
+            login = request.form['login']
+            password = request.form['password']
+            is_admin = request.form['is_admin']
+
+            create_user_status = user_model.create_user(login, password, display_name, is_admin)
+            if create_user_status:
+                return redirect(url_for('list_user'))
+        else:
+            return render_template("add_user.html")
+    else:
+        return "Niet ingelogd of geen admin"
+
 @app.route('/delete_user/<user_id>')
 def delete_user(user_id):
     if check_user_is_admin():
@@ -85,6 +107,73 @@ def add_test_user():
     else:
         return "Niet ingelogd of geen admin"
 
+# Import page & functions
+
+@app.route('/import')
+def import_page():
+   return render_template('import_screen.html')
+
+@app.route('/import', methods=['POST'])
+def import_json():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file uploaded'}), 400
+
+    json_file = request.files['file']
+
+    if json_file.filename == '':
+        return jsonify({'error': 'No file selected'}), 400
+
+    json_data = json.load(json_file)
+
+    insert_upload_to_database(json_data)
+
+    try:
+        errors = []
+        filtered_data = []
+    
+        for index, item in enumerate(json_data):
+            missing_or_invalid = []
+            
+            for key in required_keys:
+                if key not in item or item[key] in [None, ""]:
+                    missing_or_invalid.append(key)
+            
+            if missing_or_invalid:
+                errors.append({
+                    "item_index": index,
+                    "error": 'Invalid keys in json item: ' + ', '.join(missing_or_invalid)
+                })
+                continue
+
+            questions = get_questions()
+            duplicate = False
+
+            if item['question_id'] in questions:
+                errors.append({
+                    "item_index": index,
+                    "error": 'Question already exists ' + str(id)
+                })
+                duplicate = True
+
+            if not duplicate:
+                filtered_data.append(item)
+
+        if not errors:
+            insert_upload_to_database(filtered_data)
+            return jsonify({'error': False, 'message': 'Data successfully uploaded!'})
+        else:
+            # Add function to fix missing keys to questions
+
+            return jsonify({
+                'error': True,
+                'message': 'JSON file error',
+                'details': errors
+            }), 400
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
+    
+
 def check_user_is_admin():
     session['logged_user'] = {'name': 'test', 'admin': 1}  # test
 
@@ -94,6 +183,15 @@ def check_user_is_admin():
         return False
 
     return True
+
+@app.route('/export_vragen')
+def export_vragen():
+    return export_alle_vragen(False)
+
+@app.route('/export_vragen_save')
+def export_vragen_save():
+    return export_alle_vragen(True)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

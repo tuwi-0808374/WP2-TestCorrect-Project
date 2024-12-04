@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>Redacteur toevoegen</h2>
+
+    <form method="POST">
+        <label for="display_name">Naam:</label>
+        <input type="text" id="display_name" name="display_name" required>
+        <br>
+
+        <label for="login">Email/Login:</label>
+        <input type="text" id="login" name="login" required>
+        <br>
+
+        <label for="password">Wachtwoord:</label>
+        <input type="text" id="password" name="password" required>
+        <br>
+
+        <label for="is_admin">Admin:</label>
+        <select id="is_admin" name="is_admin">
+            <option value="0" selected >0 - Nee</option>
+            <option value="1" >1 - Ja</option>
+        </select>
+        <br>
+
+        <input type="submit" value="Nieuwe redacteur opslaan">
+    </form>
+</body>
+</html>
