@@ -9,25 +9,7 @@ def export_all_questions(save = False):
     cursor.execute(select_query)
     rows = cursor.fetchall()
 
-    data = []
-    for row in rows:
-        dictionary = {}
-        dictionary['questions_id'] = row['questions_id']
-        dictionary['prompts_id'] = row['prompts_id']
-        dictionary['question'] = row['question']
-        dictionary['taxonomy_bloom'] = row['taxonomy_bloom']
-        dictionary['rtti'] = row['rtti']
-        dictionary['exported'] = row['exported']
-        dictionary['date_created'] = row['date_created']
-        data.append(dictionary)
-
-    response = jsonify(data)
-
-    if save:
-        response.headers["Content-Disposition"] = "attachment; filename=questions.json"
-        response.headers["Content-Type"] = "application/json"
-
-    return response
+    return create_json(rows, save)
 
 def export_question_with_prompt_id(save = False):
     database = Database('./databases/database.db')
