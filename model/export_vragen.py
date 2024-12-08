@@ -41,3 +41,13 @@ def create_json(rows, save = False):
         response.headers["Content-Type"] = "application/json"
 
     return response
+
+def export_questions_date_range(save, date1, date2):
+    database = Database('./databases/database.db')
+    cursor, conn = database.connect_db()
+    select_query = "SELECT questions_id, prompts_id, user_id, question, taxonomy_bloom, rtti, exported, date_created FROM questions WHERE date_created BETWEEN '2024-11-26' AND '2024-11-28'"
+
+    cursor.execute(select_query)
+    rows = cursor.fetchall()
+
+    return create_json(rows, save)

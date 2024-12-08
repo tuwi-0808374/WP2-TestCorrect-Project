@@ -138,14 +138,22 @@ def check_user_is_admin():
 
     return True
 
-@app.route('/export_vragen/<get>')
+@app.route('/export_vragen/<get>',methods=['POST','GET'])
 def export_vragen(get):
-    return export_all_questions(get == "download")
+    start_date = request.args.get("start_date", default="")
+    end_date = request.args.get("end_date", default="")
+    # print(request.args.get("start_date", default=""))
+
+    if start_date != "" and end_date != "":
+        print("date questions")
+        return export_questions_date_range(get == "download", start_date, end_date)
+    else:
+        print("all questions")
+        return export_all_questions(get == "download")
 
 @app.route('/export_beoordeelde_vragen/<get>')
 def export_beoordeelde_vragen(get):
     return export_question_with_prompt_id(get == "download")
-
 
 if __name__ == "__main__":
     app.run(debug=True)
