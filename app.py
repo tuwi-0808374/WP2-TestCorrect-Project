@@ -138,17 +138,13 @@ def check_user_is_admin():
 
     return True
 
-@app.route('/export_vragen')
-def export_vragen():
-    return export_all_questions()
+@app.route('/export_vragen/<get>')
+def export_vragen(get):
+    return export_all_questions(get == "download")
 
-@app.route('/export_vragen_save')
-def export_vragen_save():
-    return export_all_questions(True)
-
-@app.route('/export_beoordeelde_vragen')
-def export_beoordeelde_vragen():
-    return export_question_with_prompt_id()
+@app.route('/export_beoordeelde_vragen/<get>')
+def export_beoordeelde_vragen(get):
+    return export_question_with_prompt_id(get == "download")
 
 
 if __name__ == "__main__":
