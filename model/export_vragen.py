@@ -1,7 +1,7 @@
 from model.database import Database
 from flask import jsonify
 
-def export_alle_vragen(save):
+def export_all_questions(save = False):
     database = Database('./databases/database.db')
     cursor, conn = database.connect_db()
     select_query = "SELECT questions_id, prompts_id, user_id, question, taxonomy_bloom, rtti, exported, date_created FROM questions"
@@ -9,6 +9,19 @@ def export_alle_vragen(save):
     cursor.execute(select_query)
     rows = cursor.fetchall()
 
+    return create_json(rows, save)
+
+def export_question_with_prompt_id(save = False):
+    database = Database('./databases/database.db')
+    cursor, conn = database.connect_db()
+    select_query = "SELECT questions_id, prompts_id, user_id, question, taxonomy_bloom, rtti, exported, date_created FROM questions WHERE prompts_id > 0 "
+
+    cursor.execute(select_query)
+    rows = cursor.fetchall()
+
+    return create_json(rows, save)
+
+def create_json(rows, save = False):
     data = []
     for row in rows:
         dictionary = {}
@@ -28,5 +41,3 @@ def export_alle_vragen(save):
         response.headers["Content-Type"] = "application/json"
 
     return response
-
-
