@@ -141,11 +141,15 @@ def check_user_is_admin():
 @app.route('/export_vragen', methods=['POST','GET'])
 def export_vragen():
     if request.method == 'POST':
+        print(request.form.to_dict())
         download_json = request.form['export_option'] == "1"
-
-        if request.form.get('between_date'):
-            return export_questions_date_range(download_json, request.form['start_date'], request.form['end_date'])
-        return request.form.to_dict()
+        has_tax = request.form.get('has_tax')
+        start_date = request.form.get('start_date')
+        end_date = request.form.get('end_date')
+        use_date = request.form.get('between_date')
+        if use_date is None:
+            start_date = end_date = None
+        return export_question_to_json(download_json, has_tax, start_date, end_date)
     return render_template('export_vragen.html')
 
 @app.route('/export_vragen_json/<get>', methods=['POST','GET'])
