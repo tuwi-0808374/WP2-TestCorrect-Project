@@ -138,8 +138,18 @@ def check_user_is_admin():
 
     return True
 
-@app.route('/export_vragen/<get>',methods=['POST','GET'])
-def export_vragen(get):
+@app.route('/export_vragen', methods=['POST','GET'])
+def export_vragen():
+    if request.method == 'POST':
+        download_json = request.form['export_option'] == "1"
+
+        if request.form.get('between_date'):
+            return export_questions_date_range(download_json, request.form['start_date'], request.form['end_date'])
+        return request.form.to_dict()
+    return render_template('export_vragen.html')
+
+@app.route('/export_vragen_json/<get>', methods=['POST','GET'])
+def export_vragen_json(get):
     start_date = request.args.get("start_date", default="")
     end_date = request.args.get("end_date", default="")
     # print(request.args.get("start_date", default=""))
