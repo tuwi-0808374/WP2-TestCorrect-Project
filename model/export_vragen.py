@@ -1,5 +1,3 @@
-from turtledemo.penrose import start
-
 from model.database import Database
 from flask import jsonify
 
