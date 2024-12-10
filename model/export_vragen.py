@@ -3,7 +3,7 @@ from turtledemo.penrose import start
 from model.database import Database
 from flask import jsonify
 
-def export_question_to_json(save = False, has_tax = False, start_date = None, end_date = None):
+def export_question_to_json(save, has_tax, start_date, end_date, mark_exported):
     database = Database('./databases/database.db')
     cursor, conn = database.connect_db()
 
@@ -19,6 +19,9 @@ def export_question_to_json(save = False, has_tax = False, start_date = None, en
         cursor.execute(select_query)
     else:
         cursor.execute(select_query)
+
+    if mark_exported:
+        print("update query dat questions exported naar 1")
 
     rows = cursor.fetchall()
 

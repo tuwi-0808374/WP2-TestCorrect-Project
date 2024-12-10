@@ -147,9 +147,10 @@ def export_vragen():
         start_date = request.form.get('start_date')
         end_date = request.form.get('end_date')
         use_date = request.form.get('between_date')
+        mark_exported = request.form.get('exported')
         if use_date is None:
             start_date = end_date = None
-        return export_question_to_json(download_json, has_tax, start_date, end_date)
+        return export_question_to_json(download_json, has_tax, start_date, end_date, mark_exported)
     return render_template('export_vragen.html')
 
 @app.route('/export_vragen_json/<get>', methods=['POST','GET'])
