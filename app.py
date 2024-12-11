@@ -48,25 +48,30 @@ def login_screen():
 
         #basic validation
         if not login or not password:
-            return "Login or password missing. Please fill in all fields."
+            flash("Login or password is missing. Please try again.")
+            return redirect(url_for('login_screen'))
 
         #log in gegevens
-        conn = get_db_connection()
-        cursor = conn.cursor()
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
 
-        # login and password check
-        cursor.execute('SELECT * FROM users WHERE login=? and password=?', (login, password))
-        user = cursor.fetchone()
-        conn.close()
+            # login and password check
+            cursor.execute('SELECT * FROM users WHERE login=? and password=?', (login, password))
+            user = cursor.fetchone()
+            conn.close()
 
-        # --
-        if user:
-            session['user'] = user['id']
-            session['username'] = user['login']
-            flash('Logged in successfully!')
-            return redirect(url_for('welcome'))
-        else:
-            flash('Incorrect login or password, please try again.')
+            # --
+            if user:
+                session['user'] = user['id']
+                session['username'] = user['login']
+                flash('Logged in successfully!')
+                return redirect(url_for('welcome'))
+            else:
+                flash('Incorrect login or password, please try again.')
+                return redirect(url_for('login_screen'))
+        except Exception as e:
+            flash(f"An Error occurred")
             return redirect(url_for('login_screen'))
 
     return render_template("login_screen.html")
