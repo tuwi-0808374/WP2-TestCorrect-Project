@@ -1,11 +1,11 @@
 
 from flask import *
-toetsvragenSchermWeergeven
+
 from model.import_database import insert_upload_to_database
 from model.toetsvragen import Toetsvragen
-=======
+
 from model.import_database import insert_upload_to_database, get_questions
-main
+
 from model.user import *
 from model.export_vragen import *
 
