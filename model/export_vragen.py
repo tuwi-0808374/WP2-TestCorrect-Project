@@ -18,10 +18,14 @@ def export_question_to_json(save, has_tax, start_date, end_date, mark_exported):
     else:
         cursor.execute(select_query)
 
-    if mark_exported:
-        print("update query dat questions exported naar 1")
-
     rows = cursor.fetchall()
+
+    if mark_exported:
+        for row in rows:
+            cursor.execute(
+                'UPDATE questions SET exported = exported + 1 WHERE questions_id = ?', (row['questions_id'],)
+            )
+            conn.commit()
 
     return create_json(rows, save)
 
