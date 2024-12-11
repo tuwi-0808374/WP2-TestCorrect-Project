@@ -1,6 +1,30 @@
 from model.database import Database
 from flask import jsonify
 
+def export_question_to_json(save, has_tax, start_date, end_date, mark_exported):
+    database = Database('./databases/database.db')
+    cursor, conn = database.connect_db()
+
+    select_query = "SELECT questions_id, prompts_id, user_id, question, taxonomy_bloom, rtti, exported, date_created FROM questions"
+    if has_tax and start_date and end_date:
+        select_query += " WHERE taxonomy_bloom IS NOT NULL OR rtti IS NOT NULL AND date_created BETWEEN ? AND ?"
+        cursor.execute(select_query, (start_date, end_date))
+    elif start_date and end_date:
+        select_query += " WHERE date_created BETWEEN ? AND ?"
+        cursor.execute(select_query, (start_date, end_date))
+    elif has_tax:
+        select_query += " WHERE taxonomy_bloom IS NOT NULL OR rtti IS NOT NULL"
+        cursor.execute(select_query)
+    else:
+        cursor.execute(select_query)
+
+    if mark_exported:
+        print("update query dat questions exported naar 1")
+
+    rows = cursor.fetchall()
+
+    return create_json(rows, save)
+
 def export_all_questions(save = False):
     database = Database('./databases/database.db')
     cursor, conn = database.connect_db()
@@ -15,6 +39,16 @@ def export_question_with_prompt_id(save = False):
     database = Database('./databases/database.db')
     cursor, conn = database.connect_db()
     select_query = "SELECT questions_id, prompts_id, user_id, question, taxonomy_bloom, rtti, exported, date_created FROM questions WHERE taxonomy_bloom IS NOT NULL OR rtti IS NOT NULL; "
+
+    cursor.execute(select_query)
+    rows = cursor.fetchall()
+
+    return create_json(rows, save)
+
+def export_questions_date_range(save, start_date, end_date):
+    database = Database('./databases/database.db')
+    cursor, conn = database.connect_db()
+    select_query = "SELECT questions_id, prompts_id, user_id, question, taxonomy_bloom, rtti, exported, date_created FROM questions WHERE date_created BETWEEN start_date AND end_date"
 
     cursor.execute(select_query)
     rows = cursor.fetchall()

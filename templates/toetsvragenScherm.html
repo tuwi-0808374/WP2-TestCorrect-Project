@@ -77,8 +77,7 @@
       -ms-transform: translateX(22px);
       transform: translateX(22px);
     }
-    
-    /* Rounded sliders */
+
     .slider.round {
       border-radius: 34px;
     }
@@ -101,7 +100,7 @@
     placeholder="Zoek een vraag..."
     autocomplete="off"
   >
-</form> | Toon vragen met taxonomy Toon vragen met taxonomy <label class="switch">
+</form> | Toon vragen met taxonomy <label class="switch">
   <input type="checkbox" id="taxonomyFilter">
   <span class="slider round"></span>
 </label> | <button><a href="/toetsvragenScherm">Ververs</a></button>
@@ -150,32 +149,28 @@
   const searchForm = document.getElementById('searchForm');
   let timeout = null;
 
-  // Listen for input changes
   zoekWoordInput.addEventListener('input', () => {
     clearTimeout(timeout);
     timeout = setTimeout(() => {
-      searchForm.submit(); // Automatically submit the form
+      searchForm.submit();
     }, 500);
   });
 
-  // Listen for changes in the select dropdown
   vakSelect.addEventListener('change', () => {
-    searchForm.submit(); // Automatically submit the form when a vak is selected
+    searchForm.submit();
   });
 
-  // Synchroniseer de slider met de huidige status van de queryparameter
   const taxonomyFilter = document.getElementById('taxonomyFilter');
   const urlParams = new URLSearchParams(window.location.search);
   taxonomyFilter.checked = urlParams.get('taxonomy') === 'true';
 
-  // Voeg eventlistener toe om de filter aan/uit te zetten
   taxonomyFilter.addEventListener('change', () => {
     if (taxonomyFilter.checked) {
-      urlParams.set('taxonomy', 'true'); // Voeg de filter toe
+      urlParams.set('taxonomy', 'true');
     } else {
-      urlParams.delete('taxonomy'); // Verwijder de filter
+      urlParams.delete('taxonomy');
     }
-    window.location.search = urlParams.toString(); // Pas de URL aan
+    window.location.search = urlParams.toString();
   });
 </script>
 
