@@ -8,13 +8,14 @@ from model.import_database import insert_upload_to_database, get_questions
 
 from model.user import *
 from model.export_vragen import *
+from model.Prompt_overview import *
 
 app = Flask(__name__)
 app.secret_key = "geheime_sleutel"
 
 @app.route('/')
 def home_page():
-    return "<p>Home Page <br></p><p><a href="'/login_screen'">login</a><br> <a href="'/list_users'">list users</a></p> <br><p><a href="'/toetsvragenScherm'">toetsvragenScherm</a></p>"
+    return "<p>Home Page <br></p><p><a href="'/login_screen'">login</a><br> <a href="'/list_users'">list users</a><br> <a href="'/prompt_overview'">prompt overview</a></p> <br><p><a href="'/toetsvragenScherm'">toetsvragenScherm</a></p>"
 
 
 @app.route('/list_users')
@@ -183,12 +184,17 @@ def export_vragen(get):
 def export_beoordeelde_vragen(get):
     return export_question_with_prompt_id(get == "download")
 
-@app.route('/prompt_tabel', methods=['GET', 'POST'])
+@app.route('/prompt_overview', methods=['GET', 'POST'])
 def prompt_tabel():
-    questions = get_questions('GET')
-    if questions:
-        return render_template("")
-    return render_template("prompt_tabel.html")
+# questions = get_questions('GET')
+#if questions:
+#return render_template("add_prompt.html")
+
+    prompt.prompt = prompt_overview(prompts.prompt)
+    prompt.redacteur = prompt_overview(redacteur)
+    prompt.toetsvragen = prompt_overview(prompts.question_count)
+    prompt.correct = prompt_overview(prompts.questions_correct)
+    return render_template("prompt_overview"".html")
 
 @app.route('/prompt_input', methods=['GET', 'POST'])
 def prompt_input():
