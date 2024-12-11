@@ -183,6 +183,18 @@ def export_vragen(get):
 def export_beoordeelde_vragen(get):
     return export_question_with_prompt_id(get == "download")
 
+@app.route('/prompt_tabel', methods=['GET', 'POST'])
+def prompt_tabel():
+    questions = get_questions('GET')
+    if questions:
+        return render_template("")
+    return render_template("prompt_tabel.html")
+
+@app.route('/prompt_input', methods=['GET', 'POST'])
+def prompt_input():
+    prompt_title = request.form['prompt-title']
+    prompt = request.form['prompt']
+
 
 if __name__ == "__main__":
     app.run(debug=True)

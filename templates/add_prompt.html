@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prompt toevoegen</title>
+</head>
+
+<header>
+    <button type="button" label="questions"> Vragen </button>
+    <button type="button" label="AI-prompts"> AI Prompts </button>
+    <button type="button" label="editor"> Redacteuren </button>
+    <hr>
+</header>
+<body>
+
+<H1> Nieuwe prompt</H1> <br>
+
+<form action="/prompt_input">
+  <label for="prompt-titel"></label>
+  <input type="text" placeholder="Titel">
+</form>
+<form action="/prompt_input">
+  <label for="prompt"></label>
+  <textarea rows="10" cols="60" placeholder="prompt"></textarea>
+</form>
+<button type="button" label="opslaan">opslaan</button>
+
+</body>
+</html>
