@@ -1,6 +1,11 @@
 
 from flask import *
+
+from model.import_database import insert_upload_to_database
+from model.toetsvragen import Toetsvragen
+
 from model.import_database import insert_upload_to_database, get_questions
+
 from model.user import *
 from model.export_vragen import *
 
@@ -21,12 +26,44 @@ def list_user():
     else:
         return "Niet ingelogd of geen admin"
 
-@app.route('/toetsvragenScherm')
+
+@app.route('/toetsvragenScherm', methods=['GET'])
 def toetsvragenScherm():
     if check_user_is_admin():
-        user_model = User()
-        all_users = user_model.get_users()
-        return render_template("/toetsvragenScherm.html")
+        # Verkrijg de queryparameters
+        page = int(request.args.get('page', 1))  # De huidige pagina (standaard 1)
+        zoekwoord = request.args.get('zoekWoord', '')  # Haal het zoekwoord op, standaard is het leeg
+        taxonomy_filter = request.args.get('taxonomy') == 'true'  # Controleer op taxonomy-filter
+        limit = 10
+        start = (page - 1) * limit
+
+        # Initialiseer het model
+        toetsvragen_model = Toetsvragen()
+
+        # Verkrijg de gefilterde of gepagineerde vragen
+        if taxonomy_filter:
+            query = 'SELECT * FROM questions WHERE taxonomy_bloom IS NOT NULL LIMIT ? OFFSET ?'
+            all_questions = toetsvragen_model.cursor.execute(query, (limit, start)).fetchall()
+            total_questions_query = 'SELECT COUNT(*) FROM questions WHERE taxonomy_bloom IS NOT NULL'
+            total_questions = toetsvragen_model.cursor.execute(total_questions_query).fetchone()[0]
+        else:
+            all_questions = toetsvragen_model.getToetsvragen(start=start, limit=limit, search=zoekwoord)
+            total_questions = toetsvragen_model.getTotalQuestions(search=zoekwoord)
+
+        # Bepaal of er vorige of volgende pagina's zijn
+        has_previous = start > 0
+        has_next = start + limit < total_questions
+
+        # Geef de data door aan de template
+        return render_template(
+            "toetsvragenScherm.html",
+            all_questions=all_questions,
+            page=page,
+            has_previous=has_previous,
+            has_next=has_next,
+            zoekwoord=zoekwoord,  # Het zoekwoord wordt meegegeven aan de template
+            taxonomy_filter=taxonomy_filter  # Toon de status van de filter in de template
+        )
     else:
         return "Niet ingelogd of geen admin"
 
@@ -169,6 +206,18 @@ def export_vragen_json(get):
 @app.route('/export_beoordeelde_vragen/<get>')
 def export_beoordeelde_vragen(get):
     return export_question_with_prompt_id(get == "download")
+
+@app.route('/prompt_tabel', methods=['GET', 'POST'])
+def prompt_tabel():
+    questions = get_questions('GET')
+    if questions:
+        return render_template("")
+    return render_template("prompt_tabel.html")
+
+@app.route('/prompt_input', methods=['GET', 'POST'])
+def prompt_input():
+    prompt_title = request.form['prompt-title']
+    prompt = request.form['prompt']
 
 if __name__ == "__main__":
     app.run(debug=True)

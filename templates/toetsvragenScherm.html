@@ -89,7 +89,96 @@
   </style>
 </head>
 <body>
-  <h2>Toetsvragen Lijst</h2>
+
+<h2>Toetsvragen Lijst</h2>
+<br>
+<form method="get" action="/toetsvragenScherm" id="searchForm">
+  Zoekwoord: <input
+    type="text"
+    id="zoekWoord"
+    name="zoekWoord"
+    value="{{ zoekwoord|default('') }}"
+    placeholder="Zoek een vraag..."
+    autocomplete="off"
+  >
+</form> | Toon vragen met taxonomy Toon vragen met taxonomy <label class="switch">
+  <input type="checkbox" id="taxonomyFilter">
+  <span class="slider round"></span>
+</label> | <button><a href="/toetsvragenScherm">Ververs</a></button>
+<br>
+<table id="questions">
+  <tr>
+      <th>Question</th>
+      <th>Taxonomy_bloom</th>
+      <th>RTTI</th>
+      <th>Exported</th>
+      <th>Date_created</th>
+  </tr>
+  {% for question in all_questions %}
+  <tr>
+    <td>{{question.question}}</td>
+    <td>{{question.taxonomy_bloom}}</td>
+      <td>{{question.rtti}}</td>
+      <td>{{question.exported}}</td>
+      <td>{{question.date_created}}</td>
+  </tr>
+  {% endfor %}
+</table>
+<br>
+<p>
+  {% if has_previous %}
+    <a href="?page={{ page - 1 }}&zoekWoord={{ zoekwoord }}">&#x3C; Vorige 10</a>
+  {% else %}
+    &#x3C; Vorige 10
+  {% endif %}
+
+  -
+
+  {% if has_next %}
+    <a href="?page={{ page + 1 }}&zoekWoord={{ zoekwoord }}">Volgende 10 &#x3E;</a>
+  {% else %}
+    Volgende 10 &#x3E;
+  {% endif %}
+</p>
+
+<br>
+<button>Expoteer naar Test-Correct</button>
+
+<script>
+  const zoekWoordInput = document.getElementById('zoekWoord');
+  const vakSelect = document.getElementById('vak');
+  const searchForm = document.getElementById('searchForm');
+  let timeout = null;
+
+  // Listen for input changes
+  zoekWoordInput.addEventListener('input', () => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      searchForm.submit(); // Automatically submit the form
+    }, 500);
+  });
+
+  // Listen for changes in the select dropdown
+  vakSelect.addEventListener('change', () => {
+    searchForm.submit(); // Automatically submit the form when a vak is selected
+  });
+
+  // Synchroniseer de slider met de huidige status van de queryparameter
+  const taxonomyFilter = document.getElementById('taxonomyFilter');
+  const urlParams = new URLSearchParams(window.location.search);
+  taxonomyFilter.checked = urlParams.get('taxonomy') === 'true';
+
+  // Voeg eventlistener toe om de filter aan/uit te zetten
+  taxonomyFilter.addEventListener('change', () => {
+    if (taxonomyFilter.checked) {
+      urlParams.set('taxonomy', 'true'); // Voeg de filter toe
+    } else {
+      urlParams.delete('taxonomy'); // Verwijder de filter
+    }
+    window.location.search = urlParams.toString(); // Pas de URL aan
+  });
+</script>
+
   <h3>Upload a JSON</h3>
     <form id="uploadForm">
       <input type="file" id="jsonFile" name="file" accept=".json">
@@ -101,39 +190,7 @@
     <button><a href="/export_vragen/browser">Bekijk JSON</a></button>
     <button><a href="/export_vragen/download">Download JSON</a></button>
   <br>
-  <p>Zoekwoord <input type="text" id="zoekWoord" name="zoekWoord"> | <label for="vak">Vak</label>
-    <select name="vak" id="vak">
-      <option value="biologie">Biologie</option>
-      <option value="engels">Engels</option>
-      <option value="nederlands">Nederlands</option>
-    </select> | Toon vragen met taxonomy <label class="switch">
-      <input type="checkbox">
-      <span class="slider round"></span>
-    </label> | <button><a href="/toetsvragenScherm">Ververs</a></button></p>
-    <br>
-    <table id="questions">
-      <tr>
-        <th>Question</th>
-        <th>Taxonomy_bloom</th>
-        <th>RTTI</th>
-        <th>Exported</th>
-        <th>Date_created</th>
-      </tr>
-      {% for question in questions %}
-      <tr>
-        <td>{{questions.question}}</td>
-        <td>{{questions.taxonomy_bloom}}</td>
-        <td>{{questions.rtti}}</td>
-        <td>{{questions.exported}}</td>
-        <td>{{questions.date_created}}</td>
-      </tr>
-      {% endfor %}
-    </table>
-    <br>
-    <p>< Vorige 10 - Volgende 10 ></p>
-    <br>
-    <button>Expoteer naar Test-Correct</button>
-    
+
     <script>
       function uploadFile() {
         const fileInput = document.getElementById('jsonFile');
