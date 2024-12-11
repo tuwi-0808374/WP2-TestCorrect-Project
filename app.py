@@ -11,7 +11,10 @@ app.secret_key = "geheime_sleutel"
 
 @app.route('/')
 def home_page():
-    return "<p>Home Page <br></p><p><a href="'/login_screen'">login</a><br> <a href="'/list_users'">list users</a></p> <br><p><a href="'/toetsvragenScherm'">toetsvragenScherm</a></p>"
+   return render_template('home_page.html')
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
 @app.route('/list_users')
