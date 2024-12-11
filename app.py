@@ -175,9 +175,33 @@ def check_user_is_admin():
 
     return True
 
-@app.route('/export_vragen/<get>')
-def export_vragen(get):
-    return export_all_questions(get == "download")
+@app.route('/export_vragen', methods=['POST','GET'])
+def export_vragen():
+    if request.method == 'POST':
+        print(request.form.to_dict())
+        download_json = request.form['export_option'] == "1"
+        has_tax = request.form.get('has_tax')
+        start_date = request.form.get('start_date')
+        end_date = request.form.get('end_date')
+        use_date = request.form.get('between_date')
+        mark_exported = request.form.get('exported')
+        if use_date is None:
+            start_date = end_date = None
+        return export_question_to_json(download_json, has_tax, start_date, end_date, mark_exported)
+    return render_template('export_vragen.html')
+
+@app.route('/export_vragen_json/<get>', methods=['POST','GET'])
+def export_vragen_json(get):
+    start_date = request.args.get("start_date", default="")
+    end_date = request.args.get("end_date", default="")
+    # print(request.args.get("start_date", default=""))
+
+    if start_date != "" and end_date != "":
+        print("date questions")
+        return export_questions_date_range(get == "download", start_date, end_date)
+    else:
+        print("all questions")
+        return export_all_questions(get == "download")
 
 @app.route('/export_beoordeelde_vragen/<get>')
 def export_beoordeelde_vragen(get):
@@ -194,7 +218,6 @@ def prompt_tabel():
 def prompt_input():
     prompt_title = request.form['prompt-title']
     prompt = request.form['prompt']
-
 
 if __name__ == "__main__":
     app.run(debug=True)
