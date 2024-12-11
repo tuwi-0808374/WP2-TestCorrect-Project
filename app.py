@@ -27,6 +27,7 @@ def toetsvragenScherm():
         # Verkrijg de queryparameters
         page = int(request.args.get('page', 1))  # De huidige pagina (standaard 1)
         zoekwoord = request.args.get('zoekWoord', '')  # Haal het zoekwoord op, standaard is het leeg
+        taxonomy_filter = request.args.get('taxonomy') == 'true'  # Controleer op taxonomy-filter
         limit = 10
         start = (page - 1) * limit
 
@@ -34,8 +35,14 @@ def toetsvragenScherm():
         toetsvragen_model = Toetsvragen()
 
         # Verkrijg de gefilterde of gepagineerde vragen
-        all_questions = toetsvragen_model.getToetsvragen(start=start, limit=limit, search=zoekwoord)
-        total_questions = toetsvragen_model.getTotalQuestions(search=zoekwoord)
+        if taxonomy_filter:
+            query = 'SELECT * FROM questions WHERE taxonomy_bloom IS NOT NULL LIMIT ? OFFSET ?'
+            all_questions = toetsvragen_model.cursor.execute(query, (limit, start)).fetchall()
+            total_questions_query = 'SELECT COUNT(*) FROM questions WHERE taxonomy_bloom IS NOT NULL'
+            total_questions = toetsvragen_model.cursor.execute(total_questions_query).fetchone()[0]
+        else:
+            all_questions = toetsvragen_model.getToetsvragen(start=start, limit=limit, search=zoekwoord)
+            total_questions = toetsvragen_model.getTotalQuestions(search=zoekwoord)
 
         # Bepaal of er vorige of volgende pagina's zijn
         has_previous = start > 0
@@ -48,7 +55,8 @@ def toetsvragenScherm():
             page=page,
             has_previous=has_previous,
             has_next=has_next,
-            zoekwoord=zoekwoord  # Het zoekwoord wordt meegegeven aan de template
+            zoekwoord=zoekwoord,  # Het zoekwoord wordt meegegeven aan de template
+            taxonomy_filter=taxonomy_filter  # Toon de status van de filter in de template
         )
     else:
         return "Niet ingelogd of geen admin"
