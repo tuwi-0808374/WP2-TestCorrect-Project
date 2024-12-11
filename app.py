@@ -48,7 +48,7 @@ def login_screen():
 
         #basic validation
         if not login or not password:
-            flash("Login or password is missing. Please try again.")
+            flash("Login or password is missing. Please try again.", "danger")
             return redirect(url_for('login_screen'))
 
         #log in gegevens
@@ -59,19 +59,21 @@ def login_screen():
             # login and password check
             cursor.execute('SELECT * FROM users WHERE login=? and password=?', (login, password))
             user = cursor.fetchone()
+
             conn.close()
 
             # --
             if user:
-                session['user'] = user['id']
+                session['user_id'] = user['user_id']
                 session['username'] = user['login']
-                flash('Logged in successfully!')
+                flash('Logged in successfully!', 'success')
                 return redirect(url_for('welcome'))
             else:
-                flash('Incorrect login or password, please try again.')
+                flash('Incorrect login or password, please try again.', 'danger')
                 return redirect(url_for('login_screen'))
+
         except Exception as e:
-            flash(f"An Error occurred")
+            flash(f"An Error occurred: {e}", "danger")
             return redirect(url_for('login_screen'))
 
     return render_template("login_screen.html")
@@ -79,10 +81,11 @@ def login_screen():
 @app.route('/welcome')
 def welcome():
     if 'user_id' not in session:
-        flash('You are not logged in!')
+        flash('You are not logged in!', 'danger')
         return redirect(url_for('login_screen'))
 
-    return render_template("welcome.html", user=session['user'])
+    return render_template("welcome.html", user=session['username'])
+
 
 if __name__ == '__main__':
     app.run(debug=True)
