@@ -89,7 +89,7 @@
   </style>
 </head>
 <body>
-toetsvragenSchermWeergeven
+
 <h2>Toetsvragen Lijst</h2>
 <br>
 <form method="get" action="/toetsvragenScherm" id="searchForm">
@@ -101,12 +101,7 @@ toetsvragenSchermWeergeven
     placeholder="Zoek een vraag..."
     autocomplete="off"
   >
-</form> | <label for="vak">Vak</label>
-  <select name="vak" id="vak">
-    <option value="biologie">Biologie</option>
-    <option value="engels">Engels</option>
-      <option value="nederlands">Nederlands</option>
-  </select> | Toon vragen met taxonomy Toon vragen met taxonomy <label class="switch">
+</form> | Toon vragen met taxonomy Toon vragen met taxonomy <label class="switch">
   <input type="checkbox" id="taxonomyFilter">
   <span class="slider round"></span>
 </label> | <button><a href="/toetsvragenScherm">Ververs</a></button>
@@ -183,10 +178,7 @@ toetsvragenSchermWeergeven
     window.location.search = urlParams.toString(); // Pas de URL aan
   });
 </script>
-</body>
-</html>
-=======
-  <h2>Toetsvragen Lijst</h2>
+
   <h3>Upload a JSON</h3>
     <form id="uploadForm">
       <input type="file" id="jsonFile" name="file" accept=".json">
@@ -198,39 +190,7 @@ toetsvragenSchermWeergeven
     <button><a href="/export_vragen/browser">Bekijk JSON</a></button>
     <button><a href="/export_vragen/download">Download JSON</a></button>
   <br>
-  <p>Zoekwoord <input type="text" id="zoekWoord" name="zoekWoord"> | <label for="vak">Vak</label>
-    <select name="vak" id="vak">
-      <option value="biologie">Biologie</option>
-      <option value="engels">Engels</option>
-      <option value="nederlands">Nederlands</option>
-    </select> | Toon vragen met taxonomy <label class="switch">
-      <input type="checkbox">
-      <span class="slider round"></span>
-    </label> | <button><a href="/toetsvragenScherm">Ververs</a></button></p>
-    <br>
-    <table id="questions">
-      <tr>
-        <th>Question</th>
-        <th>Taxonomy_bloom</th>
-        <th>RTTI</th>
-        <th>Exported</th>
-        <th>Date_created</th>
-      </tr>
-      {% for question in questions %}
-      <tr>
-        <td>{{questions.question}}</td>
-        <td>{{questions.taxonomy_bloom}}</td>
-        <td>{{questions.rtti}}</td>
-        <td>{{questions.exported}}</td>
-        <td>{{questions.date_created}}</td>
-      </tr>
-      {% endfor %}
-    </table>
-    <br>
-    <p>< Vorige 10 - Volgende 10 ></p>
-    <br>
-    <button>Expoteer naar Test-Correct</button>
-    
+
     <script>
       function uploadFile() {
         const fileInput = document.getElementById('jsonFile');
