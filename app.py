@@ -215,11 +215,5 @@ def prompt_input():
     prompt_title = request.form['prompt-title']
     prompt = request.form['prompt']
 
-@app.route('/api-test')
-def api_test():
-    print(get_taxonomy("Hoeveel is 1+1", "Taxonomie van RTTI", "rac_test"))
-
-
-
 if __name__ == "__main__":
     app.run(debug=True)

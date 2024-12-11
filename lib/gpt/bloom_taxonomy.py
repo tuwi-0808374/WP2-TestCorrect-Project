@@ -111,16 +111,20 @@ def api_ai_request(question, prompt, gpt):
     finally:
         return result
 
-def get_taxonomy(question, taxonomy, model):
+def get_taxonomy(question, prompt, model):
+    if not prompt:
+        prompt = """Gebruik de taxonomie van Bloom om de volgende vraag in één van de niveaus "Onthouden", "Begrijpen", "Toepassen", "Analyseren", "Evalueren" en "Creëren" en leg uit waarom je dat niveau hebt gekozen."""
+
     json_structure = """{
-               "niveau": "niveau",
-               "uitleg": "uitleg waarom dit niveau van toepassing is"
-            }
-        """
+                       "niveau": "niveau",
+                       "uitleg": "uitleg waarom dit niveau van toepassing is"
+                    }
+                """
 
     prompt = f""" 
-        Gebruik de {taxonomy} om de volgende vraag in één van de niveaus "Onthouden", "Begrijpen", "Toepassen", "Analyseren", "Evalueren" en "Creëren" en leg uit waarom je dat niveau hebt gekozen. Geef het antwoord in een RFC8259 JSON met de volgende opmaak:
-        {json_structure}
-        """
+            Dit is een API call, Geef dus alleen antwoord in het format wat hier onder gegeven wordt.
+            Taxonomy: {prompt} Geef het antwoord in een RFC8259 JSON met de volgende opmaak:
+            {json_structure}
+            """
 
     return api_ai_request(question, prompt, model)
