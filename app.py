@@ -1,3 +1,5 @@
+import sqlite3
+
 from flask import *
 from model.import_database import insert_upload_to_database, get_questions
 from model.user import *
@@ -31,6 +33,10 @@ def toetsvragenScherm():
     else:
         return "Niet ingelogd of geen admin"
 
+def get_db_connection():
+    conn = sqlite3.connect('database.db')
+    conn.row_factory = sqlite3.Row
+    return conn
 
 @app.route('/login_screen', methods=['GET', 'POST'])
 def login_screen():
@@ -44,14 +50,37 @@ def login_screen():
         if not login or not password:
             return "Login or password missing. Please fill in all fields."
 
-        #placeholder
-        if login == "admin" and password == "admin":
-            return render_template("user_list.html", user=login)
+        #log in gegevens
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # login and password check
+        cursor.execute('SELECT * FROM users WHERE login=? and password=?', (login, password))
+        user = cursor.fetchone()
+        conn.close()
+
+        # --
+        if user:
+            session['user'] = user['id']
+            session['username'] = user['login']
+            flash('Logged in successfully!')
+            return redirect(url_for('welcome'))
         else:
-            return "Incorrect login or password, please try again."
+            flash('Incorrect login or password, please try again.')
+            return redirect(url_for('login_screen'))
 
     return render_template("login_screen.html")
 
+@app.route('/welcome')
+def welcome():
+    if 'user_id' not in session:
+        flash('You are not logged in!')
+        return redirect(url_for('login_screen'))
+
+    return render_template("welcome.html", user=session['user'])
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 @app.route('/edit_user/<user_id>', methods=['GET', 'POST'])
 def edit_user(user_id):
@@ -157,36 +186,4 @@ def export_vragen_save():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-import sqlite3
-
-
-def get_db_connection():
-    conn = sqlite3.connect('database.db')
-    conn.row_factory = sqlite3.Row
-    return conn
-
-
-@app.route('/list_data')
-def list_data():
-    conn = get_db_connection()
-    cursor = conn.cursor()
-
-    # Example query
-    cursor.execute('SELECT * FROM users')
-    rows = cursor.fetchall()
-
-    conn.close()  # Always close the connection after use
-    return render_template('list_data.html', rows=rows)
-
-@app.route('/add_data', methods=['POST'])
-def add_data(value1=None, value2=1):
-    conn = get_db_connection()
-    cursor = conn.cursor()
-
-    cursor.execute('INSERT INTO users (login, password) VALUES (?, ?)', (value1, value2))
-    conn.commit()  # Save the changes
-
-    conn.close()
-    return redirect(url_for('list_data'))
 
