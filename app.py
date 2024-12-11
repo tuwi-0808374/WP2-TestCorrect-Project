@@ -1,7 +1,13 @@
+
 from flask import *
+toetsvragenSchermWeergeven
 from model.import_database import insert_upload_to_database
 from model.toetsvragen import Toetsvragen
+=======
+from model.import_database import insert_upload_to_database, get_questions
+main
 from model.user import *
+from model.export_vragen import *
 
 app = Flask(__name__)
 app.secret_key = "geheime_sleutel"
@@ -102,6 +108,24 @@ def edit_user(user_id):
     else:
         return "Niet ingelogd of geen admin"
 
+@app.route('/add_user', methods=['GET', 'POST'])
+def add_user():
+    if check_user_is_admin():
+        user_model = User()
+        if request.method == 'POST':
+            display_name = request.form['display_name']
+            login = request.form['login']
+            password = request.form['password']
+            is_admin = request.form['is_admin']
+
+            create_user_status = user_model.create_user(login, password, display_name, is_admin)
+            if create_user_status:
+                return redirect(url_for('list_user'))
+        else:
+            return render_template("add_user.html")
+    else:
+        return "Niet ingelogd of geen admin"
+
 @app.route('/delete_user/<user_id>')
 def delete_user(user_id):
     if check_user_is_admin():
@@ -120,17 +144,7 @@ def add_test_user():
     else:
         return "Niet ingelogd of geen admin"
 
-# Import page & functions 
-
-required_keys = [
-    "question_id",
-    "question",
-    "answer",
-    "vak",
-    "onderwijsniveau",
-    "leerjaar",
-    "question_index"
-]
+# Import page & functions
 
 @app.route('/import')
 def import_page():
@@ -141,40 +155,15 @@ def import_json():
     if 'file' not in request.files:
         return jsonify({'error': 'No file uploaded'}), 400
 
-    file = request.files['file']
+    json_file = request.files['file']
 
-    if file.filename == '':
+    if json_file.filename == '':
         return jsonify({'error': 'No file selected'}), 400
 
-    try:
-        json_data = json.load(file)
+    json_data = json.load(json_file)
 
-        errors = []
-    
-        for index, item in enumerate(json_data):
-            missing_or_invalid = []
-            
-            for key in required_keys:
+    return insert_upload_to_database(json_data)
 
-                if key not in item or item[key] in [None, ""]:
-                    missing_or_invalid.append(key)
-            
-            if missing_or_invalid:
-                errors.append({
-                    "item_index": index,
-                    "missing_or_invalid_keys": missing_or_invalid
-                })
-
-        if errors is not []:
-            insert_upload_to_database(json_data)
-            return jsonify({'error': True, 'JSON File heeft missende keys': errors})
-        else:
-            # Add function to fix missing keys to questions
-            return jsonify({'error': True, 'JSON File heeft missende keys': errors})
-    
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
-    
 
 def check_user_is_admin():
     session['logged_user'] = {'name': 'test', 'admin': 1}  # test
@@ -185,6 +174,15 @@ def check_user_is_admin():
         return False
 
     return True
+
+@app.route('/export_vragen/<get>')
+def export_vragen(get):
+    return export_all_questions(get == "download")
+
+@app.route('/export_beoordeelde_vragen/<get>')
+def export_beoordeelde_vragen(get):
+    return export_question_with_prompt_id(get == "download")
+
 
 if __name__ == "__main__":
     app.run(debug=True)
