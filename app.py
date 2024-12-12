@@ -16,7 +16,7 @@ app.secret_key = "geheime_sleutel"
 
 @app.route('/')
 def home_page():
-    return "<p>Home Page <br></p><p><a href="'/login_screen'">login</a><br> <a href="'/list_users'">list users</a><br> <a href="'/prompt_overview'">prompt overview</a></p> <br><p><a href="'/toetsvragenScherm'">toetsvragenScherm</a></p>"
+    return "<p>Home Page <br></p><p><a href="'/login_screen'">login</a><br> <a href="'/list_users'">list users</a><br><a href="'/export_vragen'">Export vragen</a><br> <a href="'/prompt_overview'">prompt overview</a></p> <br><p><a href="'/toetsvragenScherm'">toetsvragenScherm</a></p>"
 
 
 @app.route('/list_users')
@@ -182,27 +182,12 @@ def export_vragen():
         end_date = request.form.get('end_date')
         use_date = request.form.get('between_date')
         mark_exported = request.form.get('exported')
+        export_status_type = int(request.form.get('export_status_type'))
+        limit = int(request.form.get('limit'))
         if use_date is None:
             start_date = end_date = None
-        return export_question_to_json(download_json, has_tax, start_date, end_date, mark_exported)
+        return export_question_to_json(download_json, has_tax, start_date, end_date, mark_exported, export_status_type, limit)
     return render_template('export_vragen.html')
-
-@app.route('/export_vragen_json/<get>', methods=['POST','GET'])
-def export_vragen_json(get):
-    start_date = request.args.get("start_date", default="")
-    end_date = request.args.get("end_date", default="")
-    # print(request.args.get("start_date", default=""))
-
-    if start_date != "" and end_date != "":
-        print("date questions")
-        return export_questions_date_range(get == "download", start_date, end_date)
-    else:
-        print("all questions")
-        return export_all_questions(get == "download")
-
-@app.route('/export_beoordeelde_vragen/<get>')
-def export_beoordeelde_vragen(get):
-    return export_question_with_prompt_id(get == "download")
 
 @app.route('/prompt_overview', methods=['GET', 'POST'])
 def prompt_tabel():
