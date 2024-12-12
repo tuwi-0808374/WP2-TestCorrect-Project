@@ -1,7 +1,7 @@
 from model.database import Database
 from flask import jsonify
 
-def export_question_to_json(save, has_tax, start_date, end_date, mark_exported, export_status_type):
+def export_question_to_json(save, has_tax, start_date, end_date, mark_exported, export_status_type, limit):
     database = Database('./databases/database.db')
     cursor, conn = database.connect_db()
 
@@ -22,6 +22,9 @@ def export_question_to_json(save, has_tax, start_date, end_date, mark_exported, 
             select_query += " exported == 0"
         if export_status_type == 2:
              select_query += " exported > 0"
+
+    if limit > 0:
+        select_query += " LIMIT "+str(limit)
 
     cursor.execute(select_query)
     print(select_query)
