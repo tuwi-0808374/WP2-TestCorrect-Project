@@ -1,23 +1,30 @@
 from model.database import Database
 from flask import jsonify
 
-def export_question_to_json(save, has_tax, start_date, end_date, mark_exported):
+def export_question_to_json(save, has_tax, start_date, end_date, mark_exported, export_status_type):
     database = Database('./databases/database.db')
     cursor, conn = database.connect_db()
 
     select_query = "SELECT questions_id, prompts_id, user_id, question, taxonomy_bloom, rtti, exported, date_created FROM questions"
     if has_tax and start_date and end_date:
-        select_query += " WHERE taxonomy_bloom IS NOT NULL OR rtti IS NOT NULL AND date_created BETWEEN ? AND ?"
-        cursor.execute(select_query, (start_date, end_date))
+        select_query += " WHERE (taxonomy_bloom IS NOT NULL OR rtti IS NOT NULL) AND (date_created BETWEEN '"+start_date+"' AND '"+end_date+"')"
     elif start_date and end_date:
-        select_query += " WHERE date_created BETWEEN ? AND ?"
-        cursor.execute(select_query, (start_date, end_date))
+        select_query += " WHERE date_created BETWEEN '"+start_date+"' AND '"+end_date+"'"
     elif has_tax:
-        select_query += " WHERE taxonomy_bloom IS NOT NULL OR rtti IS NOT NULL"
-        cursor.execute(select_query)
-    else:
-        cursor.execute(select_query)
+        select_query += " WHERE (taxonomy_bloom IS NOT NULL OR rtti IS NOT NULL)"
 
+    if export_status_type is not 0:
+        if "WHERE" in select_query:
+            select_query += " AND"
+        else:
+            select_query += " WHERE"
+        if export_status_type == 1:
+            select_query += " exported == 0"
+        if export_status_type == 2:
+             select_query += " exported > 0"
+
+    cursor.execute(select_query)
+    print(select_query)
     rows = cursor.fetchall()
 
     if mark_exported:

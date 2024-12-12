@@ -5,10 +5,6 @@
     <title>Export Vragen</title>
 </head>
 <body>
-<!--  <h3>Export lijst JSON</h3>-->
-<!--    <button><a href="/export_vragen_json/browser">Bekijk JSON</a></button>-->
-<!--    <button><a href="/export_vragen_json/download">Download JSON</a></button>-->
-<!--  <br>-->
   <form method="POST">
     <label>Met taxonomie:</label>
     <input type="checkbox" name="has_tax">
@@ -30,6 +26,13 @@
     <br>
     <label>Markeer 'exported':</label>
     <input type="checkbox" name="exported">
+    <br>
+    <label>Selecteer exporttype:</label>
+    <select name="export_status_type">
+      <option value="0" selected >beide</option>
+      <option value="1" >vragen die nog niet gexporteert zijn</option>
+      <option value="2" >vragen die al wel gexporteert zijn</option>
+    </select>
     <br>
     <input type="submit" value="Export JSON">
   </form>
