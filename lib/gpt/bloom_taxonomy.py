@@ -123,7 +123,7 @@ def get_taxonomy(question, prompt, model):
 
     prompt = f""" 
             Dit is een API call, Geef dus alleen antwoord in het format wat hier onder gegeven wordt.
-            Taxonomy: {prompt} Geef het antwoord in een RFC8259 JSON met de volgende opmaak:
+            {prompt}. Geef het antwoord in RFC8259 JSON met de volgende opmaak:
             {json_structure}
             """
 

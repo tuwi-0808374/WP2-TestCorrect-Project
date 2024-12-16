@@ -103,13 +103,11 @@
             </select>
         </div>
 
-        <button type="button" onclick="generateAIResponse()">Genereer voorstel</button>
-    </div>
+        <form id="update-form" method="POST" action="{{ url_for('call_update_taxonomy') }}">
+            <input type="hidden" name="question_id" value="{{ question.questions_id }}">
+            <button type="submit">Update Taxonomy</button>
+        </form>
 
-    <script>
-        function generateAIResponse() {
-            alert("test");
-        }
-    </script>
+    </div>
 </body>
 </html>

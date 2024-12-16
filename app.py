@@ -6,8 +6,7 @@ from model.import_database import insert_upload_to_database
 from model.toetsvragen import Toetsvragen
 
 from model.import_database import insert_upload_to_database
-from model.index_page import index_question
-
+from model.index_page import display_question, update_taxonomy
 
 from model.user import *
 from model.export_vragen import *
@@ -165,8 +164,11 @@ def import_json():
 
 @app.route('/index/<question_id>')
 def index_page(question_id):
-    return index_question(question_id)
+    return display_question(question_id)
 
+@app.route('/update_taxonomy', methods=['POST'])
+def call_update_taxonomy():
+    return update_taxonomy(data.get('question_id'))
 
 
 def check_user_is_admin():
