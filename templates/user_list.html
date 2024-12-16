@@ -3,20 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #555;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .button {
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background-color 0.3s;
+            text-decoration: none;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .add-button {
+            margin-top: 20px;
+            display: block;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
 </head>
 <body>
-    <h1>User list</h1>
+    <h1>Redacteuren overzicht</h1>
     <ul>
         {% for user in all_users %}
             <li>
                 {{user.user_id}} - {{user.login}} - {{user.password}} - {{user.display_name}} - {{user.date_created}} - {{user.is_admin}}
-                <button><a href="/edit_user/{{user.user_id}}">Wijzig</a></button>
-                <button><a href="/delete_user/{{user.user_id}}">Verwijder</a></button>
+                <div class="button-container">
+                    <a href="/edit_user/{{user.user_id}}" class="button">Wijzig</a>
+                    <a href="/delete_user/{{user.user_id}}" class="button">Verwijder</a>
+                </div>
             </li>
         {% endfor %}
     </ul>
     <br>
-    <button><a href="/add_user">Voeg een nieuwe gebruiker toe</a></button>
-    <button><a href="/add_test_user">Voeg test gebruiker toe</a></button>
+    <a href="/add_user" class="button add-button">Voeg een nieuwe gebruiker toe</a>
+    <a href="/add_test_user" class="button add-button">Voeg test gebruiker toe</a>
 </body>
 </html>
