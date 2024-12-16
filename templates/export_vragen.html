@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Export vragen</title>
+    <title>Export Vragen</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -30,7 +30,7 @@
         }
 
         label {
-            display: block;
+            display: inline-block;
             margin-bottom: 5px;
             font-weight: bold;
             color: #555;
@@ -86,18 +86,9 @@
             margin-bottom: 10px;
         }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            margin-bottom: 10px;
-        }
-
         .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            display: inline-block;
+            margin-bottom: 15px;
         }
 
         .select-group {
@@ -110,52 +101,48 @@
 <body>
   <h1>Export Vragen</h1>
   <form method="POST">
-    <div class="form-group">
-        <label for="has_tax">Met taxonomie:</label>
-        <input type="checkbox" id="has_tax" name="has_tax">
+    <div class="checkbox-group">
+      <label for="has_tax">Met taxonomie:</label>
+      <input type="checkbox" id="has_tax" name="has_tax">
     </div>
 
-    <div class="form-group">
-        <label for="between_date">Tussen datum:</label>
-        <input type="checkbox" id="between_date" name="between_date">
+    <div class="checkbox-group">
+      <label for="between_date">Tussen datum:</label>
+      <input type="checkbox" id="between_date" name="between_date">
     </div>
 
-    <div class="form-group">
-        <label for="start_date">Start datum:</label>
-        <input type="date" id="start_date" name="start_date" value="2024-11-26">
-    </div>
+    <label for="start_date">Start datum:</label>
+    <input type="date" id="start_date" name="start_date" value="2024-11-26">
+    <br>
 
-    <div class="form-group">
-        <label for="end_date">Eind datum:</label>
-        <input type="date" id="end_date" name="end_date" value="2024-11-28">
-    </div>
+    <label for="end_date">Eind datum:</label>
+    <input type="date" id="end_date" name="end_date" value="2024-11-28">
+    <br>
 
-    <div class="form-group select-group">
-        <label for="export_option">Export optie:</label>
-        <select id="export_option" name="export_option">
-            <option value="0" selected>browser</option>
-            <option value="1">download</option>
-        </select>
-    </div>
+    <label for="export_option">Export optie:</label>
+    <select id="export_option" name="export_option">
+        <option value="0" selected>browser</option>
+        <option value="1">download</option>
+    </select>
+    <br>
 
-    <div class="form-group">
-        <label for="exported">Markeer 'exported':</label>
-        <input type="checkbox" id="exported" name="exported">
+    <div class="checkbox-group">
+    <label for="exported">Markeer 'exported':</label>
+    <input type="checkbox" id="exported" name="exported">
     </div>
+    <br>
 
-    <div class="form-group select-group">
-        <label for="export_status_type">Selecteer exporttype:</label>
-        <select id="export_status_type" name="export_status_type">
-            <option value="0" selected>beide</option>
-            <option value="1">vragen die nog niet geëxporteerd zijn</option>
-            <option value="2">vragen die al wel geëxporteerd zijn</option>
-        </select>
-    </div>
+    <label for="export_status_type">Selecteer exporttype:</label>
+    <select id="export_status_type" name="export_status_type">
+        <option value="0" selected>beide</option>
+        <option value="1">vragen die nog niet geëxporteerd zijn</option>
+        <option value="2">vragen die al wel geëxporteerd zijn</option>
+    </select>
+    <br>
 
-    <div class="form-group">
-        <label for="limit">Limiet (aantal vragen):</label>
-        <input type="number" id="limit" name="limit" value="10">
-    </div>
+    <label for="limit">Limiet (aantal vragen):</label>
+    <input type="number" id="limit" name="limit" value="10">
+    <br>
 
     <input type="submit" value="Export JSON">
   </form>
