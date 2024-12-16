@@ -8,8 +8,8 @@ from model.database_model import get_question, set_taxonomy
 
 def display_question(question_id):
     question =  get_question(question_id)
-
-    print(json.dumps(question, indent=4))
+    if question["taxonomy_bloom"]:
+        question["taxonomy_bloom"] = json.loads(question["taxonomy_bloom"])
 
     return render_template('index_page.html', question=question, models=gpt_model_map)
 
@@ -20,4 +20,5 @@ def update_taxonomy(question_id):
 
     set_taxonomy(question_id, False, taxonomy)
 
-    return redirect(url_for('index_page'))
+    return redirect(url_for('index_page', question_id=question_id))
+

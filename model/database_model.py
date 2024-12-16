@@ -1,3 +1,5 @@
+import json
+
 from flask import jsonify
 
 from model.database import Database
@@ -117,6 +119,9 @@ def set_taxonomy(question_id, rtti, bloom):
         cursor.execute("UPDATE questions SET rtti = ? WHERE questions_id = ?", (rtti, question_id))
 
     if bloom:
+        if bloom and isinstance(bloom, dict):
+            bloom = json.dumps(bloom)
+
         cursor.execute("UPDATE questions SET taxonomy_bloom = ? WHERE questions_id = ?", (bloom, question_id))
 
     conn.commit()
