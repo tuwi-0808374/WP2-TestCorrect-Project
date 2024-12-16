@@ -117,6 +117,7 @@
       <th>RTTI</th>
       <th>Exported</th>
       <th>Date_created</th>
+      <th>Index</th>
   </tr>
   {% for question in all_questions %}
   <tr>
@@ -125,6 +126,11 @@
       <td>{{question.rtti}}</td>
       <td>{{question.exported}}</td>
       <td>{{question.date_created}}</td>
+      <td>
+          <a href="{{ url_for('index_page', question_id=question.questions_id) }}">
+            <button type="button">Index Question</button>
+          </a>
+        </td>
   </tr>
   {% endfor %}
 </table>
