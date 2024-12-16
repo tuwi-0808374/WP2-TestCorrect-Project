@@ -1,7 +1,7 @@
 import json
 import traceback
 
-from openai import OpenAI
+#from openai import OpenAI
 from ollama import Client
 
 gpt_model_map = {

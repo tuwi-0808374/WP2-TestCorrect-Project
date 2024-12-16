@@ -94,3 +94,17 @@ def get_questions():
     conn.close()
 
     return question_ids
+
+def get_question(question_id):
+    database = Database('./databases/database.db')
+    cursor, conn = database.connect_db()
+
+    question = cursor.execute("SELECT * FROM questions WHERE questions_id = ?", (question_id,))
+    question = question.fetchone()
+
+    question = dict(question) if question else None
+
+    conn.commit()
+    conn.close()
+
+    return question

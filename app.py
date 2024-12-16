@@ -5,7 +5,9 @@ from lib.gpt.bloom_taxonomy import get_taxonomy
 from model.import_database import insert_upload_to_database
 from model.toetsvragen import Toetsvragen
 
-from model.import_database import insert_upload_to_database, get_questions
+from model.import_database import insert_upload_to_database
+from model.index_page import index_question
+
 
 from model.user import *
 from model.export_vragen import *
@@ -160,6 +162,11 @@ def import_json():
     json_data = json.load(json_file)
 
     return insert_upload_to_database(json_data)
+
+@app.route('/index/<question_id>')
+def index_page(question_id):
+    index_question(question_id)
+
 
 
 def check_user_is_admin():
