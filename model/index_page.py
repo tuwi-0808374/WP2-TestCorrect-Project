@@ -18,10 +18,11 @@ def display_question(question_id):
 
     return render_template('index_page.html', question=question, models=gpt_model_map, prompts=prompts)
 
-def update_taxonomy(question_id):
+def update_taxonomy(question_id, prompt):
     question = get_question(question_id)
 
-    taxonomy = get_taxonomy(question["question"], False, "rac_test")
+
+    taxonomy = get_taxonomy(question["question"], prompt, "rac_test")
 
     set_taxonomy(question_id, False, taxonomy)
 

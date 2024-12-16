@@ -104,18 +104,20 @@
         </div>
 
         <form id="update-form" method="POST" action="{{ url_for('call_update_taxonomy') }}">
-        <input type="hidden" name="question_id" value="{{ question.questions_id }}">
+            <input type="hidden" name="question_id" value="{{ question.questions_id }}">
 
-        <label for="prompt">Choose or Enter a Prompt:</label>
-        <input list="prompt-options" id="prompt" name="prompt" placeholder="Select or type a prompt" required>
-        
-        <datalist id="prompt-options">
-            {% for prompt in prompts %}
-                <option value="Error Margin: {{ prompt.error_margin }}% - {{ prompt.prompt }}"></option>
-            {% endfor %}
-        </datalist>
-        <button type="submit">Update Taxonomy</button>
-    </form>
+            <label for="prompt">Choose or Enter a Prompt:</label>
+            <input list="prompt-options" id="prompt" name="prompt" placeholder="Select or type a prompt">
+
+            <datalist id="prompt-options">
+                {% for prompt in prompts %}
+                    <option value="Error Margin: {{ prompt.error_margin }}% - {{ prompt.prompt }}"></option>
+                {% endfor %}
+            </datalist>
+
+            <button type="submit">Update Taxonomy</button>
+        </form>
+
 
     </div>
 </body>

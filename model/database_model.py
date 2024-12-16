@@ -133,17 +133,13 @@ def get_prompts():
     database = Database('./databases/database.db')
     cursor, conn = database.connect_db()
 
-    # Enable returning rows as dictionaries
     cursor = conn.cursor()
 
-    # Execute the query
     cursor.execute("SELECT * FROM prompts")
     rows = cursor.fetchall()
 
-    # Convert rows to a list of dictionaries
     prompts = [dict(row) for row in rows] if rows else None
 
-    # Close the connection
     conn.commit()
     conn.close()
 

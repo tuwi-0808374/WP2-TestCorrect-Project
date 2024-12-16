@@ -169,8 +169,13 @@ def index_page(question_id):
 @app.route('/update_taxonomy', methods=['POST'])
 def call_update_taxonomy():
     question_id = request.form.get('question_id')
-    return update_taxonomy(question_id)
+    prompt  = request.form.get('prompt')
+    prompt = clean_prompt(prompt)
+    
+    return update_taxonomy(question_id, prompt)
 
+def clean_prompt(prompt_with_error_margin):
+    return prompt_with_error_margin.split(" - ", 1)[-1]
 
 def check_user_is_admin():
     session['logged_user'] = {'name': 'test', 'admin': 1}  # test
