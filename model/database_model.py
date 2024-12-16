@@ -108,3 +108,18 @@ def get_question(question_id):
     conn.close()
 
     return question
+
+def set_taxonomy(question_id, rtti, bloom):
+    database = Database('./databases/database.db')
+    cursor, conn = database.connect_db()
+
+    if rtti:
+        cursor.execute("UPDATE questions SET rtti = ? WHERE questions_id = ?", (rtti, question_id))
+
+    if bloom:
+        cursor.execute("UPDATE questions SET taxonomy_bloom = ? WHERE questions_id = ?", (bloom, question_id))
+
+    conn.commit()
+    conn.close()
+
+    return True

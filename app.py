@@ -2,10 +2,10 @@
 from flask import *
 
 from lib.gpt.bloom_taxonomy import get_taxonomy
-from model.import_database import insert_upload_to_database
+from model.database_model import insert_upload_to_database
 from model.toetsvragen import Toetsvragen
 
-from model.import_database import insert_upload_to_database
+from model.database_model import insert_upload_to_database
 from model.index_page import display_question, update_taxonomy
 
 from model.user import *
@@ -168,7 +168,8 @@ def index_page(question_id):
 
 @app.route('/update_taxonomy', methods=['POST'])
 def call_update_taxonomy():
-    return update_taxonomy(data.get('question_id'))
+    question_id = request.form.get('question_id')
+    return update_taxonomy(question_id)
 
 
 def check_user_is_admin():

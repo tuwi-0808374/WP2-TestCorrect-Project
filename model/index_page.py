@@ -3,19 +3,21 @@ import json
 from flask import *
 
 from lib.gpt.bloom_taxonomy import gpt_model_map, get_taxonomy
-from model.import_database import get_question
+from model.database_model import get_question, set_taxonomy
+
 
 def display_question(question_id):
     question =  get_question(question_id)
 
+    print(json.dumps(question, indent=4))
+
     return render_template('index_page.html', question=question, models=gpt_model_map)
 
 def update_taxonomy(question_id):
-    data = request.json
+    question = get_question(question_id)
 
-    updated_question = get_question(question_id)
+    taxonomy = get_taxonomy(question["question"], False, "rac_test")
 
-    return jsonify({
-        "taxonomy_bloom": updated_question.get("taxonomy_bloom", {}),
-        "rtti": updated_question.get("rtti", "")
-    })
+    set_taxonomy(question_id, False, taxonomy)
+
+    return redirect(url_for('index_page'))
