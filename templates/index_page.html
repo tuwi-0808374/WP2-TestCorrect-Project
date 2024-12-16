@@ -79,6 +79,21 @@
             <p><strong>Leerjaar:</strong> 4</p>
         </div>
 
+        {% if question.taxonomy_bloom %}
+            <div>
+                <h3>Taxonomie Niveau</h3>
+                <p><strong>Niveau:</strong> {{ question.taxonomy_bloom.niveau }}</p>
+                <p><strong>Uitleg:</strong> {{ question.taxonomy_bloom.uitleg }}</p>
+            </div>
+        {% endif %}
+
+        {% if question.rtti %}
+            <div>
+                <h3>RTTI Resultaat</h3>
+                <p><strong>Resultaat:</strong> {{ question.rtti }}</p>
+            </div>
+        {% endif %}
+
         <div class="info-section">
             <label for="prompt-select">Prompt:</label>
             <select id="prompt-select">
