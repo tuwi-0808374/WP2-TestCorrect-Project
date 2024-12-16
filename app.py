@@ -165,7 +165,7 @@ def import_json():
 
 @app.route('/index/<question_id>')
 def index_page(question_id):
-    index_question(question_id)
+    return index_question(question_id)
 
 
 

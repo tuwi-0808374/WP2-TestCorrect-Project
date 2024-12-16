@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vraag Indexeren</title>
+</head>
+<body>
+    <header>
+        <h1>Vraag Indexeren</h1>
+    </header>
+
+    <div class="container">
+        <h2>Vraag indexeren naar taxonomie</h2>
+        <p><em>{{ question.question }}</em></p>
+
+        <div class="info-section">
+            <p><strong>Vak:</strong> Biologie</p>
+            <p><strong>Onderwijsniveau:</strong> HAVO</p>
+            <p><strong>Leerjaar:</strong> 4</p>
+        </div>
+
+        <div class="info-section">
+            <label for="prompt-select">Prompt:</label>
+            <select id="prompt-select">
+                <option value="v1">Alex prompt v1</option>
+                <option value="v2">Alex prompt v2</option>
+                <option value="custom">Custom Prompt</option>
+            </select>
+        </div>
+
+        <button type="button" onclick="generateAIResponse()">Genereer voorstel</button>
+    </div>
+
+    <script>
+        function generateAIResponse() {
+            alert("test");
+        }
+    </script>
+</body>
+</html>
