@@ -23,9 +23,9 @@
         <div class="info-section">
             <label for="prompt-select">Prompt:</label>
             <select id="prompt-select">
-                <option value="v1">Alex prompt v1</option>
-                <option value="v2">Alex prompt v2</option>
-                <option value="custom">Custom Prompt</option>
+                {% for key, value in models.items() %}
+                    <option value="{{ key }}">{{ key.replace('_', ' ').title() }}</option>
+                {% endfor %}
             </select>
         </div>
 
