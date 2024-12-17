@@ -12,4 +12,4 @@ def prompt_overview():
 def insert_prompt():
     database = Database('./databases/database.db')
     cursor, conn = database.connect_db()
-    insert_prompt("")
+    insert_prompt("INSERT ")

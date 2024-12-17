@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="widt=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prompts</title>
     <style>
         table {
@@ -18,18 +18,16 @@
         }
     </style>
 </head>
-
+<body>
 <header>
-    <button type="button" label="questions"> Vragen </button>
+    <button type="button" onclick="window.location.href='/toetsvragenScherm.html'" label="questions"> Vragen </button>
     <button type="button" label="AI-prompts"> AI Prompts </button>
-    <button type="button" label="editor"> Redacteuren </button>
+    <button type="button" onclick="window.location.href='user_list.html'" label="editor"> Redacteuren </button>
     <hr>
 </header>
-
-<body>
 <h1>AI Prompts</h1> <br>
 <table id="prompt">
-    <thread>
+    <thead>
     <tr>
         <th> Prompt </th>
         <th> Redacteur </th>
@@ -37,7 +35,7 @@
         <th> Correct </th>
         <th> Acties </th>
     </tr>
-    </thread>
+    </thead>
     <tbody>
     {% for prompt in all_prompts%}
     <tr>
@@ -51,7 +49,7 @@
     </tbody>
 </table> <br>
 
-<button type="button" label="add-prompt"> nieuwe prompt toevoegen </button>
+<button type="button" onclick="window.location.href='add_prompt.html'" label="add-prompt"> nieuwe prompt toevoegen </button>
 
 </body>
 </html>
