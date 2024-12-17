@@ -1,4 +1,5 @@
 from model.database import Database
+from datetime import datetime
 from flask import jsonify
 
 def prompt_overview():
@@ -13,4 +14,11 @@ def prompt_overview():
 def insert_prompt():
     database = Database('./databases/database.db')
     cursor, conn = database.connect_db()
-    insert_prompt("INSERT ")
+    #to get the date
+    today_date = datetime.today().strftime('%Y-%m-%d')
+
+    #query
+    insert_prompt("INSERT INTO prompts (prompts_id, user_id, prompt, qeustion_count, questions_correct, date_created) VALUES (?,?,?,?,?,?) ")
+
+    cursor.execute(insert_prompt,(?,?,?,?,?,today_date))
+

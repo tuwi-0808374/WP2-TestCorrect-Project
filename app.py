@@ -212,8 +212,26 @@ def prompt_tabel():
 
 @app.route('/prompt_input', methods=['GET', 'POST'])
 def prompt_input():
-    prompt_title = request.form['prompt-title']
-    prompt = request.form['prompt']
+    if request.method == 'POST':
+        try:
+            prompt_title = request.form['prompt_title'].strip()
+            prompt = request.form['prompt'].strip()
+
+            if not prompt_title or not prompt:
+                flash("titel en prompt zijn verplicht!", "error")
+                return redirect(url_for('prompt_input'))
+
+            print(f"opgeslagen prompt: {prompt_title}")
+
+            flash("prompt saved succesfully!", "success")
+            return redirect(url_for('prompt_tabel'))
+        except Exception as e:
+            #unexpected error
+            flash(f"Er is een error: {str(e)}", "error")
+            return redirect(url_for('prompt_input'))
+
+    return render_template('add_prompt.html')
+
 
 if __name__ == "__main__":
     app.run(debug=True)
