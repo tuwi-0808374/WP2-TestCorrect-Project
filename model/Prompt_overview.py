@@ -7,6 +7,7 @@ def prompt_overview():
     prompt_overview_query = "SELECT prompts.prompt, users.display_name as Redacteur, prompts.questions_count, prompts.questions_correct FROM prompts JOIN users ON users.user_id = prompts.user_id; "
     cursor.execute(prompt_overview_query)
     data = cursor.fetchall()
+    return data
 
 
 def insert_prompt():

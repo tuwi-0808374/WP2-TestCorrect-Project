@@ -206,18 +206,9 @@ def export_vragen():
 
 @app.route('/prompt_overview', methods=['GET', 'POST'])
 def prompt_tabel():
-    prompts = prompt_overview()
+    all_prompts = prompt_overview()
 
-    if request.method == 'POST':
-        return render_template("add_prompt.html")
-
-    prompt_overview_data = {
-        "prompt": prompt_overview(prompts.prompt),
-        "redacteur": prompt_overview(redacteur),
-        "toetsvragen": prompt_overview(prompts.question_count),
-        "correct": prompt_overview(prompts.questions_correct),
-    }
-    return render_template("prompt_tabel.html", data=prompt_overview_data)
+    return render_template("prompt_tabel.html", all_prompts=all_prompts)
 
 @app.route('/prompt_input', methods=['GET', 'POST'])
 def prompt_input():
