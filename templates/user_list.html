@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Redacteuren overzicht</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -19,23 +19,32 @@
             color: #555;
         }
 
-        ul {
-            list-style: none;
-            padding: 0;
-            margin: 0 auto;
-            max-width: 800px;
-        }
-
-        li {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px;
-            margin-bottom: 10px;
+        .user-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr 2fr 2fr 2fr 1fr 2fr;
+            gap: 10px;
+            margin: 20px auto;
+            max-width: 1000px;
             background: #fff;
             border: 1px solid #ddd;
             border-radius: 5px;
+            padding: 10px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-container.header {
+            font-weight: bold;
+            background-color: #eee;
+        }
+
+        .user-container > div {
+            padding: 5px;
+            word-break: break-word;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
         }
 
         .button {
@@ -47,28 +56,14 @@
             font-size: 14px;
             cursor: pointer;
             text-transform: uppercase;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s ease;
             text-decoration: none;
-            background-image: linear-gradient(90deg,#0038c6,#2467fa);
+            background-image: linear-gradient(90deg, #0038c6, #2467fa);
         }
 
         .button:hover {
             background-color: #0056b3;
-            background-image: linear-gradient(90deg,#1e8f35,#44cb5e);
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        .button-container {
-            display: flex;
-            gap: 10px;
+            background-image: linear-gradient(90deg, #1e8f35, #44cb5e);
         }
 
         .add-button {
@@ -82,19 +77,36 @@
 </head>
 <body>
     <h1>Redacteuren overzicht</h1>
-    <ul>
-        {% for user in all_users %}
-            <li>
-                {{user.user_id}} - {{user.login}} - {{user.password}} - {{user.display_name}} - {{user.date_created}} - {{user.is_admin}}
-                <div class="button-container">
-                    <a href="/edit_user/{{user.user_id}}" class="button">Wijzig</a>
-                    <a href="/delete_user/{{user.user_id}}" class="button">Verwijder</a>
-                </div>
-            </li>
-        {% endfor %}
-    </ul>
-    <br>
+
+    <!-- Kolomkoppen -->
+    <div class="user-container header">
+        <div>User ID</div>
+        <div>Login</div>
+        <div>Password</div>
+        <div>Display Name</div>
+        <div>Date Created</div>
+        <div>Is Admin</div>
+        <div>Acties</div>
+    </div>
+
+    <!-- Gebruikersdata -->
+    {% for user in all_users %}
+        <div class="user-container">
+            <div>{{ user.user_id }}</div>
+            <div>{{ user.login }}</div>
+            <div>{{ user.password }}</div>
+            <div>{{ user.display_name }}</div>
+            <div>{{ user.date_created }}</div>
+            <div>{{ user.is_admin }}</div>
+            <div class="button-container">
+                <a href="/edit_user/{{user.user_id}}" class="button">Wijzig</a>
+                <a href="/delete_user/{{user.user_id}}" class="button">Verwijder</a>
+            </div>
+        </div>
+    {% endfor %}
+
     <a href="/add_user" class="button add-button">Voeg een nieuwe gebruiker toe</a>
     <a href="/add_test_user" class="button add-button">Voeg test gebruiker toe</a>
+<br/>
 </body>
 </html>
