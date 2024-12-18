@@ -20,5 +20,5 @@ def insert_prompt():
     #query
     insert_prompt("INSERT INTO prompts (prompts_id, user_id, prompt, qeustion_count, questions_correct, date_created) VALUES (?,?,?,?,?,?) ")
 
-    cursor.execute(insert_prompt,(?,?,?,?,?,today_date))
+    # cursor.execute(insert_prompt,(?,?,?,?,?,today_date))
 
