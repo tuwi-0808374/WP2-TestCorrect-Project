@@ -6,47 +6,74 @@
     <title>Home Page</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #81c784, #ffffff);
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            color: #333;
         }
+
         .home-container {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
             width: 100%;
             max-width: 400px;
             text-align: center;
         }
+
         h2 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
+            color: #4a4a4a;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
         }
+
         a {
             display: block;
-            padding: 12px;
-            margin: 10px 0;
-            background-color: #28a745;
+            padding: 14px;
+            margin: 12px 0;
+            background: linear-gradient(135deg, #4caf50, #81c784);
             color: #fff;
             text-decoration: none;
-            border-radius: 5px;
-            font-size: 16px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background 0.3s ease, transform 0.2s ease;
         }
+
         a:hover {
-            background-color: #218838;
+            background: linear-gradient(135deg, #388e3c, #66bb6a);
+            transform: scale(1.05);
+        }
+
+        a:active {
+            transform: scale(0.98);
+        }
+
+        @media (max-width: 480px) {
+            .home-container {
+                padding: 20px;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            a {
+                font-size: 0.9rem;
+                padding: 12px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="home-container">
-        <h2>Welcome to the Home Page</h2>
+        <h2>Welcome to Our Home Page</h2>
         <a href="/login_screen">Login</a>
         <a href="/list_users">List Users</a>
         <a href="/toetsvragenScherm">Toetsvragen Screen</a>
