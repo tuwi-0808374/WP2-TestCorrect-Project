@@ -1,3 +1,4 @@
+import sqlite3
 
 from flask import *
 
@@ -15,9 +16,13 @@ from model.Prompt_overview import *
 app = Flask(__name__)
 app.secret_key = "geheime_sleutel"
 
+
 @app.route('/')
 def home_page():
-    return "<p>Home Page <br></p><p><a href="'/login_screen'">login</a><br> <a href="'/list_users'">list users</a><br><a href="'/export_vragen'">Export vragen</a><br> <a href="'/prompt_overview'">prompt overview</a></p> <br><p><a href="'/toetsvragenScherm'">toetsvragenScherm</a></p>"
+   return render_template('home_page.html')
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
 @app.route('/list_users')
@@ -25,10 +30,12 @@ def list_user():
     if check_user_is_admin():
         user_model = User()
         all_users = user_model.get_users()
-        return render_template("user_list.html", all_users = all_users)
+        return render_template("user_list.html", all_users=all_users)
     else:
         return "Niet ingelogd of geen admin"
 
+
+@app.route('/toetsvragenScherm')
 
 @app.route('/toetsvragenScherm', methods=['GET'])
 def toetsvragenScherm():
@@ -65,27 +72,63 @@ def toetsvragenScherm():
     else:
         return "Niet ingelogd of geen admin"
 
+def get_db_connection():
+    conn = sqlite3.connect('database.db')
+    conn.row_factory = sqlite3.Row
+    return conn
+
 @app.route('/login_screen', methods=['GET', 'POST'])
 def login_screen():
-
     if request.method == "POST":
         #Get login from form
         login = request.form['login']
         password = request.form["password"]
+
         print(login, password)
 
         #basic validation
         if not login or not password:
-            return "Login or password missing. Please fill in all fields."
+            flash("Login or password is missing. Please try again.", "danger")
+            return redirect(url_for('login_screen'))
 
-        #placeholder
-        if login == "admin" and password == "admin":
-            return render_template ( "user_list.html",user=login)
-        else:
-            return "Incorrect login or password, please try again."
+        #log in gegevens
+        try:
+            database = Database('./databases/database.db')
+            cursor, conn = database.connect_db()
+
+            # login and password check
+            cursor.execute('SELECT * FROM users WHERE login=? and password=?', (login, password))
+            user = cursor.fetchone()
+
+            conn.close()
+
+            # --
+            if user:
+                session['user_id'] = user['user_id']
+                session['username'] = user['login']
+                flash('Logged in successfully!', 'success')
+                return redirect(url_for('toetsvragenScherm'))
+            else:
+                flash('Incorrect login or password, please try again.', 'danger')
+                return redirect(url_for('login_screen'))
+
+        except Exception as e:
+            flash(f"An Error occurred: {e}", "danger")
+            return redirect(url_for('login_screen'))
 
     return render_template("login_screen.html")
 
+@app.route('/welcome')
+def welcome():
+    if 'user_id' not in session:
+        flash('You are not logged in!', 'danger')
+        return redirect(url_for('login_screen'))
+
+    return render_template("welcome.html", user=session['username'])
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 @app.route('/edit_user/<user_id>', methods=['GET', 'POST'])
 def edit_user(user_id):
@@ -102,9 +145,10 @@ def edit_user(user_id):
                 return redirect(url_for('list_user'))
         else:
             user = user_model.get_user(user_id)
-            return render_template("edit_user.html", user = user)
+            return render_template("edit_user.html", user=user)
     else:
         return "Niet ingelogd of geen admin"
+
 
 @app.route('/add_user', methods=['GET', 'POST'])
 def add_user():
@@ -124,6 +168,7 @@ def add_user():
     else:
         return "Niet ingelogd of geen admin"
 
+
 @app.route('/delete_user/<user_id>')
 def delete_user(user_id):
     if check_user_is_admin():
@@ -132,6 +177,7 @@ def delete_user(user_id):
         return redirect(url_for('list_user'))
     else:
         return "Niet ingelogd of geen admin"
+
 
 @app.route('/add_test_user')
 def add_test_user():
@@ -142,11 +188,13 @@ def add_test_user():
     else:
         return "Niet ingelogd of geen admin"
 
+
 # Import page & functions
 
 @app.route('/import')
 def import_page():
-   return render_template('import_screen.html')
+    return render_template('import_screen.html')
+
 
 @app.route('/import', methods=['POST'])
 def import_json():
@@ -171,7 +219,7 @@ def call_update_taxonomy():
     question_id = request.form.get('question_id')
     prompt  = request.form.get('prompt')
     prompt = clean_prompt(prompt)
-    
+
     return update_taxonomy(question_id, prompt)
 
 def clean_prompt(prompt_with_error_margin):
@@ -235,3 +283,4 @@ def prompt_input():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
