@@ -2,118 +2,114 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User List</title>
+    <title>Redacteuren overzicht</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            line-height: 1.6;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            height: 100vh;
+            background-color: #f9f9f9;
+            color: #333;
         }
+
         h1 {
             text-align: center;
-            color: #333;
             margin-top: 20px;
+            color: #555;
         }
-        .user-list {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            width: 80%;
-            max-width: 800px;
-            margin-top: 20px;
-            box-sizing: border-box;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #ddd;
-        }
-        li:last-child {
-            border-bottom: none;
-        }
-        .buttons {
-            display: flex;
+
+        .user-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr 2fr 2fr 2fr 1fr 3fr;
             gap: 10px;
-        }
-        button {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            font-size: 14px;
+            margin: 20px auto;
+            max-width: 1000px;
+            background: #fff;
+            border: 1px solid #ddd;
             border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        button:hover {
-            background-color: #218838;
+
+        .user-container.header {
+            font-weight: bold;
+            background-color: #eee;
         }
-        a {
-            text-decoration: none;
+
+        .user-container > div {
+            padding: 5px;
+            word-break: break-word;
+        }
+
+        .button-container {
+            gap: 10px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+
+        .button {
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
             color: white;
+            font-size: 14px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            background-image: linear-gradient(90deg, #0038c6, #2467fa);
         }
-        .add-user-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
-        }
-        .add-user-buttons button {
-            background-color: #007bff;
-        }
-        .add-user-buttons button:hover {
+
+        .button:hover {
             background-color: #0056b3;
+            background-image: linear-gradient(90deg, #1e8f35, #44cb5e);
+        }
+
+        .add-button {
+            margin-top: 20px;
+            display: block;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
         }
     </style>
 </head>
 <body>
+    <h1>Redacteuren overzicht</h1>
 
-    <h1>User List</h1>
-
-    <div class="user-list">
-        <ul>
-            <li>
-                <span>1 - krugw@hr.nl - geheim - Gerard van Kruining - 2024-11-12 20:53:00</span>
-                <div class="buttons">
-                    <button><a href="/edit_user/1">Edit</a></button>
-                    <button><a href="/delete_user/1">Delete</a></button>
-                </div>
-            </li>
-            <li>
-                <span>2 - vried@hr.nl - geheimer - Diederik de Vries - 2024-11-12 20:53:00</span>
-                <div class="buttons">
-                    <button><a href="/edit_user/2">Edit</a></button>
-                    <button><a href="/delete_user/2">Delete</a></button>
-                </div>
-            </li>
-            <li>
-                <span>3 - test - test - New Test - 2024-12-04 13:15:58</span>
-                <div class="buttons">
-                    <button><a href="/edit_user/3">Edit</a></button>
-                    <button><a href="/delete_user/3">Delete</a></button>
-                </div>
-            </li>
-        </ul>
+    <!-- Kolomkoppen -->
+    <div class="user-container header">
+        <div>User ID</div>
+        <div>Login</div>
+        <div>Password</div>
+        <div>Display Name</div>
+        <div>Date Created</div>
+        <div>Is Admin</div>
+        <div>Acties</div>
     </div>
 
-    <div class="add-user-buttons">
-        <button><a href="/add_user">Add New User</a></button>
-        <button><a href="/add_test_user">Add Test User</a></button>
-    </div>
+    <!-- Gebruikersdata -->
+    {% for user in all_users %}
+        <div class="user-container">
+            <div>{{ user.user_id }}</div>
+            <div>{{ user.login }}</div>
+            <div>{{ user.password }}</div>
+            <div>{{ user.display_name }}</div>
+            <div>{{ user.date_created }}</div>
+            <div>{{ user.is_admin }}</div>
+            <div class="button-container">
+                <a href="/edit_user/{{user.user_id}}" class="button">Wijzig</a>
+                <a href="/delete_user/{{user.user_id}}" class="button">Verwijder</a>
+            </div>
+        </div>
+    {% endfor %}
 
+    <a href="/add_user" class="button add-button">Voeg een nieuwe gebruiker toe</a>
+    <a href="/add_test_user" class="button add-button">Voeg test gebruiker toe</a>
+<br/>
 </body>
 </html>

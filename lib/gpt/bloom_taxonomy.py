@@ -1,7 +1,7 @@
 import json
 import traceback
 
-from openai import OpenAI
+#from openai import OpenAI
 from ollama import Client
 
 gpt_model_map = {
@@ -86,7 +86,7 @@ def get_ollama_chat(question, prompt, settings):
     return result
 
 
-def get_bloom_category(question, prompt, gpt):
+def api_ai_request(question, prompt, gpt):
     result = None
     if gpt not in gpt_model_map:
         raise ValueError(f"GPT {gpt} is niet bekend in de gpt_model_map")
@@ -111,21 +111,20 @@ def get_bloom_category(question, prompt, gpt):
     finally:
         return result
 
+def get_taxonomy(question, prompt, model):
+    if not prompt:
+        prompt = """Gebruik de taxonomie van Bloom om de volgende vraag in één van de niveaus "Onthouden", "Begrijpen", "Toepassen", "Analyseren", "Evalueren" en "Creëren" en leg uit waarom je dat niveau hebt gekozen."""
 
-if __name__ == "__main__":
-    prompt = """ 
-    Gebruik de taxonomie van Bloom om de volgende vraag in één van de niveaus "Onthouden", "Begrijpen", "Toepassen", "Analyseren", "Evalueren" en "Creëren" en leg uit waarom je dat niveau hebt gekozen. Geef het antwoord in een RFC8259 JSON met de volgende opmaak:
-    {
-       "niveau": "niveau van Bloom",
-       "uitleg": "uitleg waarom dit niveau van toepassing is"
-    }
-    """
-    question = "Wat is de hoofdstad van Nederland?"
+    json_structure = """{
+                       "niveau": "niveau",
+                       "uitleg": "uitleg waarom dit niveau van toepassing is"
+                    }
+                """
 
-    # De keuze is dus tussen "dry_run", "rac_test" en "presentatie"
-    # Het antwoord komt terug als een dictionary:
-    # {
-    #    "niveau": "niveau van Bloom",
-    #    "uitleg": "uitleg waarom dit niveau van toepassing is"
-    # }
-    print(get_bloom_category(question, prompt, "rac_test"))
+    prompt = f""" 
+            Dit is een API call, Geef dus alleen antwoord in het format wat hier onder gegeven wordt.
+            {prompt}. Geef het antwoord in RFC8259 JSON met de volgende opmaak:
+            {json_structure}
+            """
+
+    return api_ai_request(question, prompt, model)

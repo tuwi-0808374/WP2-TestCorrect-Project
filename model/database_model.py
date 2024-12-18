@@ -1,3 +1,5 @@
+import json
+
 from flask import jsonify
 
 from model.database import Database
@@ -26,7 +28,7 @@ def insert_upload_to_database(data):
 
             if missing_or_invalid:
                 errors.append({
-                    "item_index": index,
+                    "question_id": item["question_id"] or index,
                     "error": 'Invalid keys in JSON item: ' + ', '.join(missing_or_invalid)
                 })
                 continue
@@ -37,7 +39,7 @@ def insert_upload_to_database(data):
 
             if item['question_id'] in questions:
                 errors.append({
-                    "item_index": index,
+                    "question_id": item['question_id'],
                     "error": 'Question already exists with ID ' + str(item['question_id'])
                 })
                 duplicate = True
@@ -94,3 +96,51 @@ def get_questions():
     conn.close()
 
     return question_ids
+
+def get_question(question_id):
+    database = Database('./databases/database.db')
+    cursor, conn = database.connect_db()
+
+    question = cursor.execute("SELECT * FROM questions WHERE questions_id = ?", (question_id,))
+    question = question.fetchone()
+
+    question = dict(question) if question else None
+
+    conn.commit()
+    conn.close()
+
+    return question
+
+def set_taxonomy(question_id, rtti, bloom):
+    database = Database('./databases/database.db')
+    cursor, conn = database.connect_db()
+
+    if rtti:
+        cursor.execute("UPDATE questions SET rtti = ? WHERE questions_id = ?", (rtti, question_id))
+
+    if bloom:
+        if bloom and isinstance(bloom, dict):
+            bloom = json.dumps(bloom)
+
+        cursor.execute("UPDATE questions SET taxonomy_bloom = ? WHERE questions_id = ?", (bloom, question_id))
+
+    conn.commit()
+    conn.close()
+
+    return True
+
+def get_prompts():
+    database = Database('./databases/database.db')
+    cursor, conn = database.connect_db()
+
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM prompts")
+    rows = cursor.fetchall()
+
+    prompts = [dict(row) for row in rows] if rows else None
+
+    conn.commit()
+    conn.close()
+
+    return prompts

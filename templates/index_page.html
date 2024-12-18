@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vraag Indexeren</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            background-color: #0fae1e;
+            color: white;
+            padding: 10px 20px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        .container {
+            margin: 20px auto;
+            max-width: 800px;
+            background: #e8f4e8;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 1);
+        }
+
+        p {
+            font-size: 17px;
+            line-height: 1.5;
+            color: #555;
+        }
+
+        .info-section {
+            margin-bottom: 15px;
+        }
+
+        select, button {
+            padding: 8px 12px;
+            font-size: 15px;
+        }
+
+        select {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #0fae1e;
+            color: white;
+            cursor: pointer;
+            border-radius: 1px;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Vraag Indexeren</h1>
+        <a href="{{ url_for('toetsvragenScherm') }}">
+            <button style="background-color: #cccccc; color: black;" type="button">Terug naar vragen</button>
+        </a>
+    </header>
+
+    <div class="container">
+        <h2>Vraag indexeren naar taxonomie</h2>
+        <p><em>{{ question.question }}</em></p>
+
+        <div class="info-section">
+            <p><strong>Vak:</strong> Biologie</p>
+            <p><strong>Onderwijsniveau:</strong> HAVO</p>
+            <p><strong>Leerjaar:</strong> 4</p>
+        </div>
+
+        {% if question.taxonomy_bloom %}
+            <div>
+                <h3>Taxonomie Niveau</h3>
+                <p><strong>Niveau:</strong> {{ question.taxonomy_bloom.niveau }}</p>
+                <p><strong>Uitleg:</strong> {{ question.taxonomy_bloom.uitleg }}</p>
+            </div>
+        {% endif %}
+
+        {% if question.rtti %}
+            <div>
+                <h3>RTTI Resultaat</h3>
+                <p><strong>Resultaat:</strong> {{ question.rtti }}</p>
+            </div>
+        {% endif %}
+
+        <div class="info-section">
+            <label for="prompt-select">Prompt:</label>
+            <select id="prompt-select">
+                {% for key, value in models.items() %}
+                    <option value="{{ key }}">{{ key.replace('_', ' ').title() }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <form id="update-form" method="POST" action="{{ url_for('call_update_taxonomy') }}">
+            <input type="hidden" name="question_id" value="{{ question.questions_id }}">
+
+            <label for="prompt">Choose or Enter a Prompt:</label>
+            <input list="prompt-options" id="prompt" name="prompt" placeholder="Select or type a prompt">
+
+            <datalist id="prompt-options">
+                {% for prompt in prompts %}
+                    <option value="Error Margin: {{ prompt.error_margin }}% - {{ prompt.prompt }}"></option>
+                {% endfor %}
+            </datalist>
+
+            <button type="submit">Update Taxonomy</button>
+        </form>
+
+
+    </div>
+</body>
+</html>

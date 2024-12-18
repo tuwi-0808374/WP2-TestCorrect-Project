@@ -1,9 +1,17 @@
 import sqlite3
 
 from flask import *
-from model.import_database import insert_upload_to_database, get_questions
+
+from lib.gpt.bloom_taxonomy import get_taxonomy
+from model.database_model import insert_upload_to_database
+from model.toetsvragen import Toetsvragen
+
+from model.database_model import insert_upload_to_database
+from model.index_page import display_question, update_taxonomy
+
 from model.user import *
 from model.export_vragen import *
+from model.Prompt_overview import *
 
 app = Flask(__name__)
 app.secret_key = "geheime_sleutel"
@@ -28,11 +36,39 @@ def list_user():
 
 
 @app.route('/toetsvragenScherm')
+
+@app.route('/toetsvragenScherm', methods=['GET'])
 def toetsvragenScherm():
     if check_user_is_admin():
-        user_model = User()
-        all_users = user_model.get_users()
-        return render_template("/toetsvragenScherm.html")
+        page = int(request.args.get('page', 1))
+        zoekwoord = request.args.get('zoekWoord', '')
+        taxonomy_filter = request.args.get('taxonomy') == 'true'
+        limit = 10
+        start = (page - 1) * limit
+
+        toetsvragen_model = Toetsvragen()
+
+        if taxonomy_filter:
+            query = 'SELECT * FROM questions WHERE taxonomy_bloom IS NOT NULL LIMIT ? OFFSET ?'
+            all_questions = toetsvragen_model.cursor.execute(query, (limit, start)).fetchall()
+            total_questions_query = 'SELECT COUNT(*) FROM questions WHERE taxonomy_bloom IS NOT NULL'
+            total_questions = toetsvragen_model.cursor.execute(total_questions_query).fetchone()[0]
+        else:
+            all_questions = toetsvragen_model.getToetsvragen(start=start, limit=limit, search=zoekwoord)
+            total_questions = toetsvragen_model.getTotalQuestions(search=zoekwoord)
+
+        has_previous = start > 0
+        has_next = start + limit < total_questions
+
+        return render_template(
+            "toetsvragenScherm.html",
+            all_questions=all_questions,
+            page=page,
+            has_previous=has_previous,
+            has_next=has_next,
+            zoekwoord=zoekwoord,
+            taxonomy_filter=taxonomy_filter
+        )
     else:
         return "Niet ingelogd of geen admin"
 
@@ -174,6 +210,20 @@ def import_json():
 
     return insert_upload_to_database(json_data)
 
+@app.route('/index/<question_id>')
+def index_page(question_id):
+    return display_question(question_id)
+
+@app.route('/update_taxonomy', methods=['POST'])
+def call_update_taxonomy():
+    question_id = request.form.get('question_id')
+    prompt  = request.form.get('prompt')
+    prompt = clean_prompt(prompt)
+
+    return update_taxonomy(question_id, prompt)
+
+def clean_prompt(prompt_with_error_margin):
+    return prompt_with_error_margin.split(" - ", 1)[-1]
 
 def check_user_is_admin():
     session['logged_user'] = {'name': 'test', 'admin': 1}  # test
@@ -185,15 +235,50 @@ def check_user_is_admin():
 
     return True
 
-
-@app.route('/export_vragen')
+@app.route('/export_vragen', methods=['POST','GET'])
 def export_vragen():
-    return export_alle_vragen(False)
+    if request.method == 'POST':
+        print(request.form.to_dict())
+        download_json = request.form['export_option'] == "1"
+        has_tax = request.form.get('has_tax')
+        start_date = request.form.get('start_date')
+        end_date = request.form.get('end_date')
+        use_date = request.form.get('between_date')
+        mark_exported = request.form.get('exported')
+        export_status_type = int(request.form.get('export_status_type'))
+        limit = int(request.form.get('limit'))
+        if use_date is None:
+            start_date = end_date = None
+        return export_question_to_json(download_json, has_tax, start_date, end_date, mark_exported, export_status_type, limit)
+    return render_template('export_vragen.html')
 
+@app.route('/prompt_overview', methods=['GET', 'POST'])
+def prompt_tabel():
+    all_prompts = prompt_overview()
 
-@app.route('/export_vragen_save')
-def export_vragen_save():
-    return export_alle_vragen(True)
+    return render_template("prompt_tabel.html", all_prompts=all_prompts)
+
+@app.route('/prompt_input', methods=['GET', 'POST'])
+def prompt_input():
+    if request.method == 'POST':
+        try:
+            prompt_title = request.form['prompt_title'].strip()
+            prompt = request.form['prompt'].strip()
+
+            if not prompt_title or not prompt:
+                flash("titel en prompt zijn verplicht!", "error")
+                return redirect(url_for('prompt_input'))
+
+            print(f"opgeslagen prompt: {prompt_title}")
+
+            flash("prompt saved succesfully!", "success")
+            return redirect(url_for('prompt_tabel'))
+        except Exception as e:
+            #unexpected error
+            flash(f"Er is een error: {str(e)}", "error")
+            return redirect(url_for('prompt_input'))
+
+    return render_template('add_prompt.html')
 
 
 if __name__ == "__main__":
