@@ -47,6 +47,7 @@ def login_screen():
         #Get login from form
         login = request.form['login']
         password = request.form["password"]
+
         print(login, password)
 
         #basic validation
@@ -56,8 +57,8 @@ def login_screen():
 
         #log in gegevens
         try:
-            conn = get_db_connection()
-            cursor = conn.cursor()
+            database = Database('./databases/database.db')
+            cursor, conn = database.connect_db()
 
             # login and password check
             cursor.execute('SELECT * FROM users WHERE login=? and password=?', (login, password))
@@ -70,7 +71,7 @@ def login_screen():
                 session['user_id'] = user['user_id']
                 session['username'] = user['login']
                 flash('Logged in successfully!', 'success')
-                return redirect(url_for('welcome'))
+                return redirect(url_for('toetsvragenScherm'))
             else:
                 flash('Incorrect login or password, please try again.', 'danger')
                 return redirect(url_for('login_screen'))
