@@ -122,7 +122,11 @@
   {% for question in all_questions %}
   <tr>
     <td>{{question.question}}</td>
-    <td>{{question.taxonomy_bloom}}</td>
+      {% if question.taxonomy_bloom %}
+          <td>{{ question.taxonomy_bloom}}</td>
+        {% else %}
+          <td>Geen informatie beschikbaar</td>
+        {% endif %}
       <td>{{question.rtti}}</td>
       <td>{{question.exported}}</td>
       <td>{{question.date_created}}</td>
