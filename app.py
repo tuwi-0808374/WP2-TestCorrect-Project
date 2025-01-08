@@ -201,7 +201,13 @@ def export_vragen():
         limit = int(request.form.get('limit'))
         if use_date is None:
             start_date = end_date = None
-        return export_question_to_json(download_json, has_tax, start_date, end_date, mark_exported, export_status_type, limit)
+        json_export = export_question_to_json(download_json, has_tax, start_date, end_date, mark_exported, export_status_type, limit)
+
+        if json_export is None:
+            return render_template('export_vragen.html', prompt="Deze combinatie geeft 0 vragen, probeer opnieuw")
+        else:
+            return json_export
+
     return render_template('export_vragen.html')
 
 @app.route('/prompt_overview', methods=['GET', 'POST'])
@@ -232,6 +238,18 @@ def prompt_input():
 
     return render_template('add_prompt.html')
 
+@app.route('/prompt_verwijderen', methods=['GET', 'POST'])
+def prompt_verwijderen():
+    all_prompts = prompt_overview()
+
+    return render_template("prompt_verwijderen.html", all_prompts=all_prompts)
+@app.route('/delete_prompt/<prompt_id>')
+def delete_prompt_id(prompt_id):
+    if check_user_is_admin():
+        delete_prompt(prompt_id)
+        return redirect(url_for('prompt_verwijderen'))
+    else:
+        return "Niet ingelogd of geen admin"
 
 if __name__ == "__main__":
     app.run(debug=True)
