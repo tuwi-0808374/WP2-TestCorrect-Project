@@ -30,6 +30,9 @@ def export_question_to_json(save, has_tax, start_date, end_date, mark_exported, 
     print(select_query)
     rows = cursor.fetchall()
 
+    if len(rows) == 0:
+        return None
+
     if mark_exported:
         for row in rows:
             cursor.execute(
