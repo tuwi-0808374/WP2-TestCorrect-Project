@@ -10,6 +10,10 @@ class User():
         result = self.cursor.execute('SELECT * FROM users').fetchall()
         return result
 
+    def get_users_offset(self, start, limit):
+        result = self.cursor.execute('SELECT * FROM users LIMIT ? OFFSET ?', (limit, start)).fetchall()
+        return result
+
     def login_user(self, login, password):
         login_query = 'SELECT 1 FROM users WHERE login = ?LIMIT 1'
         ##hash passwords????

@@ -23,9 +23,17 @@ def home_page():
 @app.route('/list_users')
 def list_user():
     if check_user_is_admin():
+        page = int(request.args.get('page', 1))
+        limit = 10
+        start = (page - 1) * limit
+
         user_model = User()
-        all_users = user_model.get_users()
-        return render_template("user_list.html", all_users = all_users)
+        all_users = user_model.get_users_offset(start, limit)
+
+        has_previous = start > 0
+        has_next = start + limit < len(user_model.get_users())
+
+        return render_template("user_list.html", all_users = all_users, page=page, has_previous=has_previous, has_next=has_next)
     else:
         return "Niet ingelogd of geen admin"
 
