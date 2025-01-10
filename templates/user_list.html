@@ -108,6 +108,14 @@
         </div>
     {% endfor %}
 
+    {% if has_previous %}
+        <a class="button add-button" href="?page={{ page - 1 }}">&#x3C; Vorige 10</a>
+    {% endif %}
+
+    {% if has_next %}
+        <a class="button add-button" href="?page={{ page + 1 }}">Volgende 10 &#x3E;</a>
+    {% endif %}
+
     <a href="/add_user" class="button add-button">Voeg een nieuwe gebruiker toe</a>
     <a href="/add_test_user" class="button add-button">Voeg test gebruiker toe</a>
 <br/>
