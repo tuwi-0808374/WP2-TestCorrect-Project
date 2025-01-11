@@ -32,11 +32,13 @@ def list_user():
         if request.method == 'POST':
             search = request.form['search']
             all_users = user_model.get_users_offset(start, limit, search)
+            total_users = user_model.get_users(search)
         else:
             all_users = user_model.get_users_offset(start, limit)
+            total_users = user_model.get_users()
 
         has_previous = start > 0
-        has_next = start + limit < len(user_model.get_users())
+        has_next = start + limit < len(total_users)
 
         return render_template("user_list.html", all_users = all_users, page=page, has_previous=has_previous, has_next=has_next)
     else:

@@ -61,12 +61,10 @@
             text-transform: uppercase;
             transition: background-color 0.3s ease;
             text-decoration: none;
-            background-image: linear-gradient(90deg, #0038c6, #2467fa);
         }
 
         .button:hover {
             background-color: #0056b3;
-            background-image: linear-gradient(90deg, #1e8f35, #44cb5e);
         }
 
         .add-button {
@@ -76,14 +74,43 @@
             margin-left: auto;
             margin-right: auto;
         }
+
+        .next-button{
+            margin-top: 20px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        form {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px;
+        }
+
+        form input[type="text"] {
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 300px;
+        }
+
+        form button {
+            padding: 8px 12px;
+        }
+
     </style>
 </head>
 <body>
     <h1>Redacteuren overzicht</h1>
     <form method="POST">
-        <input  type="text" name="search"  placeholder="Zoek op naam redacteur... " />
-        <button type="submit">Search</button>
+        <input id="search-input" type="text" name="search" placeholder="Zoek op naam redacteur (Display Name)...">
+        <button type="submit" class="button">Zoeken</button>
+        <a href="/list_users" class="button">Herstel Zoekopdracht</a>
     </form>
+
     <!-- Kolomkoppen -->
     <div class="user-container header">
         <div>User ID</div>
@@ -110,17 +137,18 @@
             </div>
         </div>
     {% endfor %}
-
+    <div class="next-button">
     {% if has_previous %}
-        <a class="button add-button" href="?page={{ page - 1 }}">&#x3C; Vorige 10</a>
+        <a class="button" href="?page={{ page - 1 }}">&#x3C; Vorige 10</a>
     {% endif %}
+
+    <span class="current-page"> Page {{ page }} </span>
 
     {% if has_next %}
-        <a class="button add-button" href="?page={{ page + 1 }}">Volgende 10 &#x3E;</a>
+        <a class="button" href="?page={{ page + 1 }}">Volgende 10 &#x3E;</a>
     {% endif %}
-
+    </div>
     <a href="/add_user" class="button add-button">Voeg een nieuwe gebruiker toe</a>
     <a href="/add_test_user" class="button add-button">Voeg test gebruiker toe</a>
-<br/>
 </body>
 </html>

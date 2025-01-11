@@ -6,13 +6,15 @@ class User():
         database = Database('./databases/database.db')
         self.cursor, self.con = database.connect_db()
 
-    def get_users(self):
-        result = self.cursor.execute('SELECT * FROM users').fetchall()
+    def get_users(self, search = None):
+        if search:
+            result = self.cursor.execute('SELECT * FROM users WHERE display_name LIKE ?', (f"%{search}%",)).fetchall()
+        else:
+            result = self.cursor.execute('SELECT * FROM users').fetchall()
         return result
 
     def get_users_offset(self, start, limit, search = None):
         if search:
-            print(search)
             result = self.cursor.execute('SELECT * FROM users WHERE display_name LIKE ? LIMIT ? OFFSET ?', (f"%{search}%", limit, start)).fetchall()
         else:
             result = self.cursor.execute('SELECT * FROM users LIMIT ? OFFSET ?', (limit, start)).fetchall()
