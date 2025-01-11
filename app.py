@@ -20,15 +20,20 @@ def home_page():
     return "<p>Home Page <br></p><p><a href="'/login_screen'">login</a><br> <a href="'/list_users'">list users</a><br><a href="'/export_vragen'">Export vragen</a><br> <a href="'/prompt_overview'">prompt overview</a></p> <br><p><a href="'/toetsvragenScherm'">toetsvragenScherm</a></p>"
 
 
-@app.route('/list_users')
+@app.route('/list_users', methods=['GET', 'POST'])
 def list_user():
     if check_user_is_admin():
         page = int(request.args.get('page', 1))
+
         limit = 10
         start = (page - 1) * limit
 
         user_model = User()
-        all_users = user_model.get_users_offset(start, limit)
+        if request.method == 'POST':
+            search = request.form['search']
+            all_users = user_model.get_users_offset(start, limit, search)
+        else:
+            all_users = user_model.get_users_offset(start, limit)
 
         has_previous = start > 0
         has_next = start + limit < len(user_model.get_users())

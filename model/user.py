@@ -10,8 +10,12 @@ class User():
         result = self.cursor.execute('SELECT * FROM users').fetchall()
         return result
 
-    def get_users_offset(self, start, limit):
-        result = self.cursor.execute('SELECT * FROM users LIMIT ? OFFSET ?', (limit, start)).fetchall()
+    def get_users_offset(self, start, limit, search = None):
+        if search:
+            print(search)
+            result = self.cursor.execute('SELECT * FROM users WHERE display_name LIKE ? LIMIT ? OFFSET ?', (f"%{search}%", limit, start)).fetchall()
+        else:
+            result = self.cursor.execute('SELECT * FROM users LIMIT ? OFFSET ?', (limit, start)).fetchall()
         return result
 
     def login_user(self, login, password):
