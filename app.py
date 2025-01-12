@@ -246,7 +246,18 @@ def prompt_verwijderen():
 @app.route('/delete_prompt/<prompt_id>')
 def delete_prompt_id(prompt_id):
     if check_user_is_admin():
-        delete_prompt(prompt_id)
+        # delete_prompt(prompt_id)
+        row = get_prompt_info(prompt_id)
+        # row['prompts_id']
+        # row['prompt']
+        # row['question_count']
+        if row:
+            if row['question_count'] > 0:
+                print(f"prompt is gekoppeld aan {str(row['question_count'])} vragen")
+            else:
+                print("prompt is niet gekoppeld aan een vraag")
+        else:
+            print("prompt ongeldig")
         return redirect(url_for('prompt_verwijderen'))
     else:
         return "Niet ingelogd of geen admin"

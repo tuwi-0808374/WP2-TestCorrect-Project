@@ -23,8 +23,28 @@ def insert_prompt():
     # cursor.execute(insert_prompt,(?,?,?,?,?,today_date))
 
 def delete_prompt(prompts_id):
-    print(prompts_id)
     database = Database('./databases/database.db')
     cursor, conn = database.connect_db()
     cursor.execute("DELETE FROM prompts WHERE prompts_id = ?", (str(prompts_id),))
     conn.commit()
+
+def get_prompt_info(prompts_id):
+    database = Database('./databases/database.db')
+    cursor, conn = database.connect_db()
+    query = """
+        SELECT 
+            p.prompts_id, 
+            p.prompt, 
+            COUNT(q.questions_id) AS question_count
+        FROM 
+            prompts p
+        LEFT JOIN 
+            questions q 
+        ON 
+            p.prompts_id = q.prompts_id
+        WHERE 
+            p.prompts_id = ?
+        GROUP BY 
+            p.prompts_id"""
+    result = cursor.execute(query, (prompts_id,)).fetchone()
+    return result
