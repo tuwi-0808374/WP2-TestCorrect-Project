@@ -22,9 +22,13 @@ def insert_prompt():
 
     # cursor.execute(insert_prompt,(?,?,?,?,?,today_date))
 
-def delete_prompt(prompts_id):
+def delete_prompt(prompts_id, delete_related_questions):
     database = Database('./databases/database.db')
     cursor, conn = database.connect_db()
+
+    if delete_related_questions:
+        cursor.execute("DELETE FROM questions WHERE prompts_id = ?;", (prompts_id,))
+
     cursor.execute("DELETE FROM prompts WHERE prompts_id = ?", (str(prompts_id),))
     conn.commit()
 
