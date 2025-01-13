@@ -190,7 +190,6 @@ def check_user_is_admin():
 @app.route('/export_vragen', methods=['POST','GET'])
 def export_vragen():
     if request.method == 'POST':
-        print(request.form.to_dict())
         download_json = request.form['export_option'] == "1"
         has_tax = request.form.get('has_tax')
         start_date = request.form.get('start_date')
@@ -255,15 +254,12 @@ def delete_prompt_id(prompt_id):
                 delete_prompt(prompt_id, True)
         else:
             row = get_prompt_info(prompt_id)
-            # row['prompts_id']
-            # row['prompt']
-            # row['question_count']
             if row:
                 if row['question_count'] > 0:
                     print(f"prompt is gekoppeld aan {str(row['question_count'])} vragen")
                 else:
                     print("prompt is niet gekoppeld aan een vraag")
-                return render_template("prompt_verwijderen.html", prompt=row)
+                return render_template("prompt_verwijderen_opties.html", prompt=row)
             else:
                 print("prompt ongeldig")
                 return redirect(url_for('prompt_verwijderen'))
