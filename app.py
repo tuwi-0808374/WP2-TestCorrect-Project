@@ -243,21 +243,31 @@ def prompt_verwijderen():
     all_prompts = prompt_overview()
 
     return render_template("prompt_verwijderen.html", all_prompts=all_prompts)
-@app.route('/delete_prompt/<prompt_id>')
+
+@app.route('/delete_prompt/<prompt_id>', methods=['GET', 'POST'])
 def delete_prompt_id(prompt_id):
     if check_user_is_admin():
-        # delete_prompt(prompt_id)
-        row = get_prompt_info(prompt_id)
-        # row['prompts_id']
-        # row['prompt']
-        # row['question_count']
-        if row:
-            if row['question_count'] > 0:
-                print(f"prompt is gekoppeld aan {str(row['question_count'])} vragen")
+        if request.method == 'POST':
+            delete_option = request.form['delete_option']
+            if delete_option == "0":
+                delete_prompt(prompt_id, False)
             else:
-                print("prompt is niet gekoppeld aan een vraag")
+                delete_prompt(prompt_id, True)
         else:
-            print("prompt ongeldig")
+            row = get_prompt_info(prompt_id)
+            # row['prompts_id']
+            # row['prompt']
+            # row['question_count']
+            if row:
+                if row['question_count'] > 0:
+                    print(f"prompt is gekoppeld aan {str(row['question_count'])} vragen")
+                else:
+                    print("prompt is niet gekoppeld aan een vraag")
+                return render_template("prompt_verwijderen.html", prompt=row)
+            else:
+                print("prompt ongeldig")
+                return redirect(url_for('prompt_verwijderen'))
+
         return redirect(url_for('prompt_verwijderen'))
     else:
         return "Niet ingelogd of geen admin"
