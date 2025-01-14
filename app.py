@@ -205,7 +205,6 @@ def check_user_is_admin():
 @app.route('/export_vragen', methods=['POST','GET'])
 def export_vragen():
     if request.method == 'POST':
-        print(request.form.to_dict())
         download_json = request.form['export_option'] == "1"
         has_tax = request.form.get('has_tax')
         start_date = request.form.get('start_date')
@@ -216,7 +215,13 @@ def export_vragen():
         limit = int(request.form.get('limit'))
         if use_date is None:
             start_date = end_date = None
-        return export_question_to_json(download_json, has_tax, start_date, end_date, mark_exported, export_status_type, limit)
+        json_export = export_question_to_json(download_json, has_tax, start_date, end_date, mark_exported, export_status_type, limit)
+
+        if json_export is None:
+            return render_template('export_vragen.html', prompt="Deze combinatie geeft 0 vragen, probeer opnieuw")
+        else:
+            return json_export
+
     return render_template('export_vragen.html')
 
 @app.route('/prompt_overview', methods=['GET', 'POST'])
@@ -247,6 +252,36 @@ def prompt_input():
 
     return render_template('add_prompt.html')
 
+@app.route('/prompt_verwijderen', methods=['GET', 'POST'])
+def prompt_verwijderen():
+    all_prompts = prompt_overview()
+
+    return render_template("prompt_verwijderen.html", all_prompts=all_prompts)
+
+@app.route('/delete_prompt/<prompt_id>', methods=['GET', 'POST'])
+def delete_prompt_id(prompt_id):
+    if check_user_is_admin():
+        if request.method == 'POST':
+            delete_option = request.form['delete_option']
+            if delete_option == "0":
+                delete_prompt(prompt_id, False)
+            else:
+                delete_prompt(prompt_id, True)
+        else:
+            row = get_prompt_info(prompt_id)
+            if row:
+                if row['question_count'] > 0:
+                    print(f"prompt is gekoppeld aan {str(row['question_count'])} vragen")
+                else:
+                    print("prompt is niet gekoppeld aan een vraag")
+                return render_template("prompt_verwijderen_opties.html", prompt=row)
+            else:
+                print("prompt ongeldig")
+                return redirect(url_for('prompt_verwijderen'))
+
+        return redirect(url_for('prompt_verwijderen'))
+    else:
+        return "Niet ingelogd of geen admin"
 
 if __name__ == "__main__":
     app.run(debug=True)
