@@ -6,7 +6,7 @@ from lib.gpt.bloom_taxonomy import gpt_model_map, get_taxonomy
 from model.database_model import *
 
 
-def display_question(question_id):
+def display_question(question_id, proposal=None):
     question =  get_question(question_id)
     if question["taxonomy_bloom"]:
         question["taxonomy_bloom"] = json.loads(question["taxonomy_bloom"])

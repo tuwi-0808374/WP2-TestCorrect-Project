@@ -127,22 +127,18 @@
 
         <form id="update-form" method="POST" action="{{ url_for('call_update_taxonomy') }}">
             <input type="hidden" name="question_id" value="{{ question.questions_id }}">
+            {% if proposal is not none %}
+                <label for="prompt">Choose or Enter a Prompt:</label>
+                <select id="prompt" name="prompt">
+                    {% for prompt in prompts %}
+                        <option value="{{ prompt.prompt }}" title="Fout Margin: {{ prompt.error_margin }}% - {{ prompt.prompt }}">
+                            Fout Margin: {{ prompt.error_margin }}% - {{ prompt.prompt[:50] }}...
+                        </option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Update Taxonomy</button>
+            {% endif %}
 
-            <label for="prompt">Choose or Enter a Prompt:</label>
-
-            <label for="prompt">Choose or Enter a Prompt:</label>
-            <label for="prompt">Choose or Enter a Prompt:</label>
-            <select id="prompt" name="prompt">
-                {% for prompt in prompts %}
-                    <option value="{{ prompt.prompt }}" title="Fout Margin: {{ prompt.error_margin }}% - {{ prompt.prompt }}">
-                        Fout Margin: {{ prompt.error_margin }}% - {{ prompt.prompt[:50] }}...
-                    </option>
-                {% endfor %}
-            </select>
-
-
-
-            <button type="submit">Update Taxonomy</button>
         </form>
 
 
