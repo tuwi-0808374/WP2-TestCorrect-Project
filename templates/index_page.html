@@ -127,6 +127,7 @@
 
         <form id="update-form" method="POST" action="{{ url_for('generate_proposal') }}">
             <input type="hidden" name="question_id" value="{{ question.questions_id }}">
+            <input type="hidden" name="previous_prompt" value="{{ previous_prompt }}">
             {% if proposal is not none %}
                 <h3>Voorgestelde Prompt</h3>
 
@@ -134,8 +135,8 @@
                 <p><strong>Uitleg:</strong> {{ proposal.uitleg }}</p>
 
                 <form method="post">
-                    <button type="submit" name="status" value="approved" style="background-color: green;">✔</button>
-                    <button type="submit" name="status" value="rejected" style="background-color: red;">X</button>
+                    <button type="submit" name="status" value="approved" formaction="{{ url_for('proposal_status', status='approved') }}" style="background-color: green;">✔</button>
+                    <button type="submit" name="status" value="rejected" formaction="{{ url_for('proposal_status', status='rejected') }}" style="background-color: red;">X</button>
                 </form>
             {% else %}
                 <label for="prompt">Choose or Enter a Prompt:</label>

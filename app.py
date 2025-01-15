@@ -233,9 +233,20 @@ def call_update_taxonomy():
 @app.route('/generate_proposal', methods=['POST'])
 def generate_proposal():
     question_id = request.form.get('question_id')
-    proposal = get_proposal(question_id, request.form.get('prompt'))
+    prompt = request.form.get('prompt')
+    proposal = get_proposal(question_id, prompt)
 
-    return display_question(question_id, proposal)
+    return display_question(question_id, proposal, prompt)
+
+@app.route('/proposal_status', methods=['POST']) 
+def proposal_status():
+    question_id = request.form.get('question_id')
+    if request.form.get('status') == 'approved':
+        return update_taxonomy(question_id, request.form.get('proposal'))
+    else:
+        prompt = request.form.get('previous_prompt')
+        proposal = get_proposal(question_id, prompt)
+        return display_question(question_id, proposal)
 
 def clean_prompt(prompt_with_error_margin):
     return prompt_with_error_margin.split(" - ", 1)[-1]
