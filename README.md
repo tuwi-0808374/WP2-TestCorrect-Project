@@ -6,13 +6,12 @@ Welkom bij het TestCorrect-project! Dit project is een webapplicatie ontwikkeld 
 
 Met behulp van AI, specifiek ChatGPT, kunnen redacteuren toetsvragen beoordelen, scoren en verbeteren. De applicatie biedt daarnaast een gebruikersdashboard voor redacteuren, een admin-dashboard voor beheerders, en functionaliteit voor het importeren en exporteren van gegevens in JSON-formaat.
 
-Belangrijkste kenmerken van de applicatie:
+Belangrijkste kenmerken van de applicatie
 Beoordelen van toetsvragen met behulp van AI en taxonomieën (Bloom en RTTI).
 Inloggen en persoonlijke dashboards voor redacteuren.
 Admin-dashboard voor het beheren van gebruikers en vragen.
 JSON-import en export voor het opslaan en delen van gegevens.
 Met deze webapplicatie willen we redacteuren helpen om sneller en eenvoudiger toetsvragen te verbeteren en de kwaliteit van toetsen te verhogen.
----
 
 ## Vereisten
 
