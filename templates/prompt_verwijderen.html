@@ -19,20 +19,12 @@
     </style>
 </head>
 <body>
-<header>
-    <button type="button" onclick="window.location.href='/toetsvragenScherm.html'" label="questions"> Vragen </button>
-    <button type="button" label="AI-prompts"> AI Prompts </button>
-    <button type="button" onclick="window.location.href='user_list.html'" label="editor"> Redacteuren </button>
-    <hr>
-</header>
 <h1>AI Prompts</h1> <br>
 <table id="prompt">
     <thead>
     <tr>
         <th> Prompt </th>
         <th> Redacteur </th>
-        <th> Toetsvragen ingedeeld </th>
-        <th> Correct </th>
         <th> Acties </th>
     </tr>
     </thead>
@@ -41,9 +33,6 @@
     <tr>
         <td>{{prompt.prompt}}</td>
         <td>{{prompt.redacteur}}</td>
-        <td>{{prompt.toetsvragen}}</td>
-        <td>{{prompt.correct}}</td>
-        <td> <button type="button" label="?"> Details </button> </td>
         <td> <a type="button" href="/delete_prompt/{{prompt.prompts_id}}" > Verwijderen </a> </td>
     </tr>
     {% endfor %}
