@@ -138,10 +138,6 @@ def welcome():
 
     return render_template("welcome.html", user=session['username'])
 
-
-if __name__ == '__main__':
-    app.run(debug=True)
-
 @app.route('/edit_user/<user_id>', methods=['GET', 'POST'])
 def edit_user(user_id):
     if check_user_is_admin():
