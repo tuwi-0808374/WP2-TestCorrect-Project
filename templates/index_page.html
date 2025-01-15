@@ -43,6 +43,16 @@
             border: 1px solid #ddd;
         }
 
+        .container-header {
+            background-color: #007BFF;
+            color: white;
+            padding: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+
         p {
             font-size: 17px;
             line-height: 1.5;
@@ -79,6 +89,15 @@
     {% include 'header.html' %}
 
     <div class="container">
+        <div class="container-header" style="display: flex; justify-content: space-between; align-items: center;">
+            Vraag Indexeren
+            <div>
+            <a href="{{ url_for('toetsvragenScherm') }}">
+                <button style="background-color: #cccccc; color: black;" type="button">Terug naar vragen</button>
+            </a>
+            </div>
+        </div>
+
         <h2>Vraag indexeren naar taxonomie</h2>
         <p><em>{{ question.question }}</em></p>
 
