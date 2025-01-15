@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Redacteuren overzicht</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style_user_list.css') }}"
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_user_list.css') }}">
 </head>
 <body>
+    {% include 'header.html' %}
     <h1>Redacteuren overzicht</h1>
     <form method="POST">
         <input id="search-input" type="text" name="search" placeholder="Zoek op naam redacteur (Display Name)...">
