@@ -5,34 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prompts</title>
     <style>
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #555;
+        }
         table {
             width: 100%;
+            max-width: 900px; /* Maximale breedte van de tabel */
             border-collapse: collapse;
+            margin: 0 auto; /* Center de tabel */
         }
-        table, th, td{
-        border: 1px solid black;
-    }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
         th, td {
             padding: 8px;
             text-align: left;
+            word-wrap: break-word; /* Laat de tekst binnen de cellen wrappen */
+            white-space: normal; /* Zorgt ervoor dat tekst zich op meerdere regels verdeelt */
+            max-width: 300px; /* Zet een maximale breedte voor de cellen */
         }
+
+        td {
+            word-wrap: break-word;
+            max-width: 300px; /* Maximaliseer de breedte per cel */
+            overflow-wrap: break-word; /* Zorg ervoor dat lange woorden kunnen breken */
+        }
+
     </style>
 </head>
 <body>
-<header>
-    <button type="button" onclick="window.location.href='/toetsvragenScherm.html'" label="questions"> Vragen </button>
-    <button type="button" label="AI-prompts"> AI Prompts </button>
-    <button type="button" onclick="window.location.href='user_list.html'" label="editor"> Redacteuren </button>
-    <hr>
-</header>
-<h1>AI Prompts</h1> <br>
+{% include 'header.html' %}
 <table id="prompt">
+    <h1>AI Prompts</h1> <br>
     <thead>
     <tr>
         <th> Prompt </th>
         <th> Redacteur </th>
-        <th> Toetsvragen ingedeeld </th>
-        <th> Correct </th>
         <th> Acties </th>
     </tr>
     </thead>
@@ -41,16 +53,10 @@
     <tr>
         <td>{{prompt.prompt}}</td>
         <td>{{prompt.redacteur}}</td>
-        <td>{{prompt.toetsvragen}}</td>
-        <td>{{prompt.correct}}</td>
-        <td> <button type="button" label="?"> Details </button> </td>
         <td> <a type="button" href="/delete_prompt/{{prompt.prompts_id}}" > Verwijderen </a> </td>
     </tr>
     {% endfor %}
     </tbody>
 </table> <br>
-
-<button type="button" onclick="window.location.href='/prompt_input'" label="add-prompt" formmethod="POST"> nieuwe prompt toevoegen </button>
-
 </body>
 </html>
