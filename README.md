@@ -35,6 +35,7 @@ Met deze webapplicatie willen we redacteuren helpen om sneller en eenvoudiger to
    - [2. Prompt Verwijderen](#2-prompt-verwijderen)
    - [3. Export Vragen](#3-export-vragen)
    - [Exportopties](#exportopties)
+5. [Schermen](#Schermen)
 ---
 
 ## Vereisten
@@ -205,6 +206,11 @@ Op de exportpagina zijn extra filter- en configuratieopties beschikbaar:
    - Stel een maximumaantal vragen in die geëxporteerd mogen worden.
 
 ---
+
+### Schermen
+![WP2_scherm (3)](https://github.com/user-attachments/assets/e40217d4-a045-4c25-ba8e-d76792547090)
+![WP2_scherm (2)](https://github.com/user-attachments/assets/2bac275f-b9de-4e7e-bd26-f70eed91476d)
+
 
 # WP2 Starter 
 
