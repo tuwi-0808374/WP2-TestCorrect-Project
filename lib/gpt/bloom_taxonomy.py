@@ -5,11 +5,6 @@ import traceback
 from ollama import Client
 
 gpt_model_map = {
-    "dry_run": {
-        "model": None,
-        "endpoint": None,
-        "api_key": None
-    },
     "rac_test": {
         "model": "llama3.2",
         "endpoint": "https://ollama.rac-sd.nl",

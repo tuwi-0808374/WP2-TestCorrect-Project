@@ -129,13 +129,18 @@
             <input type="hidden" name="question_id" value="{{ question.questions_id }}">
 
             <label for="prompt">Choose or Enter a Prompt:</label>
-            <input list="prompt-options" id="prompt" name="prompt" placeholder="Select or type a prompt">
 
-            <datalist id="prompt-options">
+            <label for="prompt">Choose or Enter a Prompt:</label>
+            <label for="prompt">Choose or Enter a Prompt:</label>
+            <select id="prompt" name="prompt">
                 {% for prompt in prompts %}
-                    <option value="Error Margin: {{ prompt.error_margin }}% - {{ prompt.prompt }}"></option>
+                    <option value="{{ prompt.prompt }}" title="Fout Margin: {{ prompt.error_margin }}% - {{ prompt.prompt }}">
+                        Fout Margin: {{ prompt.error_margin }}% - {{ prompt.prompt[:50] }}...
+                    </option>
                 {% endfor %}
-            </datalist>
+            </select>
+
+
 
             <button type="submit">Update Taxonomy</button>
         </form>
