@@ -125,22 +125,31 @@
             </select>
         </div>
 
-        <form id="update-form" method="POST" action="{{ url_for('call_update_taxonomy') }}">
+        <form id="update-form" method="POST" action="{{ url_for('generate_proposal') }}">
             <input type="hidden" name="question_id" value="{{ question.questions_id }}">
             {% if proposal is not none %}
+                <h3>Voorgestelde Prompt</h3>
+
+                <p><strong>Niveau:</strong> {{ proposal.niveau }}</p>
+                <p><strong>Uitleg:</strong> {{ proposal.uitleg }}</p>
+
+                <form method="post">
+                    <button type="submit" name="status" value="approved" style="background-color: green;">✔</button>
+                    <button type="submit" name="status" value="rejected" style="background-color: red;">X</button>
+                </form>
+            {% else %}
                 <label for="prompt">Choose or Enter a Prompt:</label>
                 <select id="prompt" name="prompt">
-                    {% for prompt in prompts %}
+                    {% for prompt in prompts %} 
                         <option value="{{ prompt.prompt }}" title="Fout Margin: {{ prompt.error_margin }}% - {{ prompt.prompt }}">
                             Fout Margin: {{ prompt.error_margin }}% - {{ prompt.prompt[:50] }}...
                         </option>
                     {% endfor %}
                 </select>
-                <button type="submit">Update Taxonomy</button>
+                <button type="submit">Genereer voorstel </button>
             {% endif %}
 
         </form>
-
 
     </div>
 </body>

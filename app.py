@@ -7,7 +7,7 @@ from model.database_model import insert_upload_to_database
 from model.toetsvragen import Toetsvragen
 
 from model.database_model import insert_upload_to_database
-from model.index_page import display_question, update_taxonomy
+from model.index_page import display_question, get_proposal, update_taxonomy
 
 from model.user import *
 from model.export_vragen import *
@@ -229,6 +229,13 @@ def call_update_taxonomy():
     prompt = clean_prompt(prompt)
 
     return update_taxonomy(question_id, prompt)
+
+@app.route('/generate_proposal', methods=['POST'])
+def generate_proposal():
+    question_id = request.form.get('question_id')
+    proposal = get_proposal(question_id, request.form.get('prompt'))
+
+    return display_question(question_id, proposal)
 
 def clean_prompt(prompt_with_error_margin):
     return prompt_with_error_margin.split(" - ", 1)[-1]
