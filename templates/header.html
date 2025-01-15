@@ -1,0 +1,13 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='style_header.css') }}">
+<header>
+    <nav>
+        <div class="logo">
+            <img src="/static/logo.png" alt="Logo" />
+        </div>
+        <ul>
+            <li><a href="{{ url_for('export_vragen') }}">Export Vragen</a></li>
+            <li><a href="{{ url_for('list_user') }}">Lijst Gebruikers</a></li>
+            <li><a href="{{ url_for('prompt_verwijderen') }}">Prompt Verwijderen</a></li>
+        </ul>
+    </nav>
+</header>
