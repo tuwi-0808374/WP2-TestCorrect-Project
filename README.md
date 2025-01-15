@@ -13,6 +13,30 @@ Admin-dashboard voor het beheren van gebruikers en vragen.
 JSON-import en export voor het opslaan en delen van gegevens.
 Met deze webapplicatie willen we redacteuren helpen om sneller en eenvoudiger toetsvragen te verbeteren en de kwaliteit van toetsen te verhogen.
 
+## Inhoudsopgave
+1. [Overzicht](#overzicht)
+2. [Vereisten](#vereisten)
+   - [Software en versievereisten](#1-software-en-versievereisten)
+   - [Benodigde Python-packages](#2-benodigde-python-packages)
+3. [Installatie Stappen](#installatie-stappen)
+   - [1. Clone de repository](#1-clone-de-repository)
+   - [2. Maak een virtual environment (venv) aan](#2-maak-een-virtual-environment-venv-aan)
+     - [Optie 1: Command Line](#optie-1-command-line)
+     - [Optie 2: PyCharm](#optie-2-pycharm)
+   - [3. Installeer afhankelijkheden](#3-installeer-afhankelijkheden)
+     - [Optie 1: Installeren met `requirements.txt`](#optie-1-installeren-met-requirementstxt)
+     - [Optie 2: Installeren zonder `requirements.txt`](#optie-2-installeren-zonder-requirementstxt)
+   - [4. Configuratie-informatie](#4-configuratie-informatie)
+   - [5. Start de applicatie](#5-start-de-applicatie)
+     - [Methode 1: Via de terminal](#methode-1-via-de-terminal)
+     - [Methode 2: Via PyCharm](#methode-2-via-pycharm)
+4. [Hoe je bepaalde schermen kunt bereiken](#hoe-je-bepaalde-schermen-kunt-bereiken)
+   - [1. Overzicht Redacteuren](#1-overzicht-redacteuren)
+   - [2. Prompt Verwijderen](#2-prompt-verwijderen)
+   - [3. Export Vragen](#3-export-vragen)
+   - [Exportopties](#exportopties)
+---
+
 ## Vereisten
 
 ### 1. Software en versievereisten
@@ -116,6 +140,69 @@ De applicatie is toegankelijk via [http://127.0.0.1:5000](http://127.0.0.1:5000)
 #### Methode 2: Via PyCharm
 1. Open het bestand `app.py` in PyCharm.
 2. Klik op de **Run**-knop om het script te starten.
+
+---
+
+### Hoe je bepaalde schermen kunt bereiken
+
+#### 1. Overzicht Redacteuren
+**URL:** [http://127.0.0.1:5000/list_users](http://127.0.0.1:5000/list_users)  
+**Beschrijving:** Een overzicht van alle gebruikers (redacteuren).  
+
+**Functionaliteiten:**
+- Gebruikers kunnen worden toegevoegd, verwijderd en gewijzigd.
+- Zoekfunctionaliteit beschikbaar (ook met wildcards zoals `%`).
+- Paginaknoppen verschijnen wanneer er meer dan 10 redacteuren zijn:
+  - Navigatie naar de volgende of vorige 10 redacteuren.
+
+---
+
+#### 2. Prompt Verwijderen
+**URL:** [http://127.0.0.1:5000/prompt_verwijderen](http://127.0.0.1:5000/prompt_verwijderen)  
+**Beschrijving:** Testpagina voor het verwijderen van prompts. Gebruikers kunnen hier prompts selecteren en bepalen hoe ze verwijderd worden.  
+
+**Functionaliteiten:**
+1. Een prompt selecteren om te verwijderen.
+2. Na selectie verschijnt een overzicht met de volgende verwijderopties:
+   - Alleen de geselecteerde prompt verwijderen.
+   - De geselecteerde prompt met alle gekoppelde vragen verwijderen.
+
+---
+
+#### 3. Export Vragen
+**URL:** [http://127.0.0.1:5000/export_vragen](http://127.0.0.1:5000/export_vragen)  
+**Beschrijving:** Hiermee kunnen gebruikers vragen exporteren naar een JSON-bestand.  
+
+**Functionaliteiten:**
+- Kies tussen de volgende exportopties:
+  - **Downloaden:** Download het JSON-bestand naar je apparaat.
+  - **In-browser weergave:** Bekijk het JSON-bestand direct in de browser.
+
+---
+
+### Exportopties
+Op de exportpagina zijn extra filter- en configuratieopties beschikbaar:
+
+1. **Met taxonomie:**
+   - Filter vragen op basis van taxonomiecategorieën.
+
+2. **Tussen datum:**
+   - Stel een tijdsperiode in met een start- en einddatum om specifieke vragen te exporteren.
+
+3. **Exportopties:**
+   - **Browser:** Bekijk de geëxporteerde vragen in de browser.
+   - **Download:** Download het JSON-bestand als bestand.
+
+4. **Markeer 'exported':**  
+   - Markeer vragen die zijn geëxporteerd, zodat ze in de database als "geëxporteerd" worden aangeduid.
+
+5. **Selecteer exporttype:**
+   - **Beide:** Exporteer zowel al geëxporteerde als niet-geëxporteerde vragen.
+   - **Niet-geëxporteerde vragen:** Exporteer alleen vragen die nog niet eerder geëxporteerd zijn.
+   - **Geëxporteerde vragen:** Exporteer alleen vragen die al eerder zijn geëxporteerd.
+
+6. **Limiet (aantal vragen):**
+   - Stel een maximumaantal vragen in die geëxporteerd mogen worden.
 
 ---
 
