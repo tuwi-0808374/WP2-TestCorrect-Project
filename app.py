@@ -118,6 +118,8 @@ def login_screen():
             if user:
                 session['user_id'] = user['user_id']
                 session['username'] = user['login']
+                session["admin"] = user["is_admin"] == 1
+
                 flash('Logged in successfully!', 'success')
                 return redirect(url_for('toetsvragenScherm'))
             else:
@@ -252,11 +254,11 @@ def clean_prompt(prompt_with_error_margin):
     return prompt_with_error_margin.split(" - ", 1)[-1]
 
 def check_user_is_admin():
-    session['logged_user'] = {'name': 'test', 'admin': 1}  # test
+    session["admin"] = True #test
 
-    if 'logged_user' not in session:
+    if 'admin' not in session:
         return False
-    elif session['logged_user']['admin'] == 0:
+    elif not session["admin"]:
         return False
 
     return True

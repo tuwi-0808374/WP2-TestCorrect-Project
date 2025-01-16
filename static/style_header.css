@@ -76,3 +76,9 @@ header nav a:hover {
         height: 30px;
     }
 }
+
+header ul li.active a {
+    background-color: #007BFF; /* Blauw voor actieve link */
+    color: white; /* Tekst wit maken */
+}
+
