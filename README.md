@@ -76,7 +76,13 @@ Het gebruik van een virtual environment is aanbevolen om afhankelijkheden van di
    python -m venv venv
    ```
 2. Activeer de virtual environment:
-   - Op Windows:
+    
+   - Op Windows (Git Bash):
+     ```bash
+     source venv/Scripts/activate
+     ```
+
+   - Op Windows (Command Prompt (CMD)):
      ```bash
      venv\Scripts\activate
      ```
