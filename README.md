@@ -63,8 +63,8 @@ Je kunt deze afhankelijkheden installeren met behulp van het meegeleverde `requi
 Om te beginnen, clonen we de repository naar je lokale machine. Gebruik de volgende opdracht:
 
 ```bash
-git clone https://github.com/username/testcorrect-project.git
-cd testcorrect-project
+git clone https://github.com/Rac-Software-Development/wp2-2024-mvc-1d2-undefined-1.git
+cd wp2-2024-mvc-1d2-undefined-1
 ```
 
 ### 2. Maak een virtual environment (venv) aan
