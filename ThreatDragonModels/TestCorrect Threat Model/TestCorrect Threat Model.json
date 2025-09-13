@@ -38,6 +38,7 @@
             },
             "visible": true,
             "shape": "process",
+            "zIndex": 1,
             "ports": {
               "groups": {
                 "top": {
@@ -121,7 +122,6 @@
               ]
             },
             "id": "acb36f7b-8fb0-4cc5-8f67-9157f5630021",
-            "zIndex": 1,
             "data": {
               "type": "tm.Process",
               "name": "Flask App",
@@ -139,7 +139,7 @@
           },
           {
             "position": {
-              "x": 100,
+              "x": 110,
               "y": 180
             },
             "size": {
@@ -158,6 +158,7 @@
             },
             "visible": true,
             "shape": "actor",
+            "zIndex": 2,
             "ports": {
               "groups": {
                 "top": {
@@ -241,7 +242,6 @@
               ]
             },
             "id": "5c229e91-94fb-4268-a726-7894d917a127",
-            "zIndex": 2,
             "data": {
               "type": "tm.Actor",
               "name": "Redacteur",
@@ -278,6 +278,7 @@
             },
             "visible": true,
             "shape": "store",
+            "zIndex": 3,
             "ports": {
               "groups": {
                 "top": {
@@ -361,7 +362,6 @@
               ]
             },
             "id": "095bf35a-f820-40aa-8378-5a2a7039be1a",
-            "zIndex": 3,
             "data": {
               "type": "tm.Store",
               "name": "Database",
@@ -484,7 +484,7 @@
             "connector": "smooth",
             "data": {
               "type": "tm.Flow",
-              "name": "Data Flow",
+              "name": "Login & Inputs",
               "description": "",
               "outOfScope": false,
               "isTrustBoundary": false,
@@ -497,178 +497,16 @@
               "threats": []
             },
             "labels": [
-              "Data Flow"
+              "Login & Inputs"
             ],
-            "id": "8361f76c-6145-41b6-9830-addca7bf4621",
+            "id": "3ee9b728-5dbd-41cd-8c0a-f6905306b01b",
             "source": {
-              "cell": "5c229e91-94fb-4268-a726-7894d917a127",
-              "port": "b4a4c5ca-ed6a-44ab-b0e3-e4094df014d0"
+              "x": 220,
+              "y": 210
             },
             "target": {
               "cell": "acb36f7b-8fb0-4cc5-8f67-9157f5630021",
               "port": "38d34d40-bc1d-46c4-8e2f-20df276675e0"
-            }
-          },
-          {
-            "shape": "flow",
-            "attrs": {
-              "line": {
-                "stroke": "#333333",
-                "targetMarker": {
-                  "name": "block"
-                },
-                "sourceMarker": {
-                  "name": ""
-                },
-                "strokeDasharray": null
-              }
-            },
-            "width": 200,
-            "height": 100,
-            "zIndex": 10,
-            "connector": "smooth",
-            "data": {
-              "type": "tm.Flow",
-              "name": "Data Flow",
-              "description": "",
-              "outOfScope": false,
-              "isTrustBoundary": false,
-              "reasonOutOfScope": "",
-              "hasOpenThreats": false,
-              "isBidirectional": false,
-              "isEncrypted": false,
-              "isPublicNetwork": false,
-              "protocol": "",
-              "threats": []
-            },
-            "labels": [
-              "Data Flow"
-            ],
-            "id": "0ed40454-5f32-4d96-b4a4-4bbf1115b8e6",
-            "source": {
-              "x": 283,
-              "y": 366
-            },
-            "target": {
-              "cell": "acb36f7b-8fb0-4cc5-8f67-9157f5630021",
-              "port": "38d34d40-bc1d-46c4-8e2f-20df276675e0"
-            }
-          },
-          {
-            "position": {
-              "x": 170,
-              "y": 340
-            },
-            "size": {
-              "width": 112.5,
-              "height": 60
-            },
-            "attrs": {
-              "text": {
-                "text": "Ollama"
-              },
-              "body": {
-                "stroke": "#333333",
-                "strokeWidth": 1.5,
-                "strokeDasharray": null
-              }
-            },
-            "visible": true,
-            "shape": "actor",
-            "ports": {
-              "groups": {
-                "top": {
-                  "position": "top",
-                  "attrs": {
-                    "circle": {
-                      "r": 4,
-                      "magnet": true,
-                      "stroke": "#5F95FF",
-                      "strokeWidth": 1,
-                      "fill": "#fff",
-                      "style": {
-                        "visibility": "hidden"
-                      }
-                    }
-                  }
-                },
-                "right": {
-                  "position": "right",
-                  "attrs": {
-                    "circle": {
-                      "r": 4,
-                      "magnet": true,
-                      "stroke": "#5F95FF",
-                      "strokeWidth": 1,
-                      "fill": "#fff",
-                      "style": {
-                        "visibility": "hidden"
-                      }
-                    }
-                  }
-                },
-                "bottom": {
-                  "position": "bottom",
-                  "attrs": {
-                    "circle": {
-                      "r": 4,
-                      "magnet": true,
-                      "stroke": "#5F95FF",
-                      "strokeWidth": 1,
-                      "fill": "#fff",
-                      "style": {
-                        "visibility": "hidden"
-                      }
-                    }
-                  }
-                },
-                "left": {
-                  "position": "left",
-                  "attrs": {
-                    "circle": {
-                      "r": 4,
-                      "magnet": true,
-                      "stroke": "#5F95FF",
-                      "strokeWidth": 1,
-                      "fill": "#fff",
-                      "style": {
-                        "visibility": "hidden"
-                      }
-                    }
-                  }
-                }
-              },
-              "items": [
-                {
-                  "group": "top",
-                  "id": "0c80b91a-65c8-475b-a6e3-15e5aeb2ca3a"
-                },
-                {
-                  "group": "right",
-                  "id": "b4a4c5ca-ed6a-44ab-b0e3-e4094df014d0"
-                },
-                {
-                  "group": "bottom",
-                  "id": "29d2460f-4613-4e4b-8d3e-89cbcf092473"
-                },
-                {
-                  "group": "left",
-                  "id": "5e6facf1-ea75-43a1-90e9-4bcc06b10317"
-                }
-              ]
-            },
-            "id": "ecc71c89-830b-4b0a-8962-d4bb1df9d26b",
-            "zIndex": 11,
-            "data": {
-              "type": "tm.Actor",
-              "name": "Ollama",
-              "description": "",
-              "isTrustBoundary": false,
-              "outOfScope": false,
-              "reasonOutOfScope": "",
-              "hasOpenThreats": false,
-              "providesAuthentication": false,
-              "threats": []
             }
           }
         ]
