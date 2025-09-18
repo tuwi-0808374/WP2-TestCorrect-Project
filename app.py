@@ -1,6 +1,9 @@
 import sqlite3
 
 from flask import *
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
 
 from lib.gpt.bloom_taxonomy import get_taxonomy
 from model.database_model import insert_upload_to_database
@@ -15,7 +18,11 @@ from model.Prompt_overview import *
 
 app = Flask(__name__)
 app.secret_key = "geheime_sleutel"
-
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["100 per minute"] # 100 requests per minute
+)
 
 @app.route('/')
 def home_page():
@@ -90,6 +97,7 @@ def get_db_connection():
     return conn
 
 @app.route('/login_screen', methods=['GET', 'POST'])
+@limiter.limit("10/minute")
 def login_screen():
     if request.method == "POST":
         #Get login from form
