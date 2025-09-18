@@ -96,38 +96,23 @@ def login_screen():
         login = request.form['login']
         password = request.form["password"]
 
-        print(login, password)
-
         #basic validation
         if not login or not password:
             flash("Login or password is missing. Please try again.", "danger")
             return redirect(url_for('login_screen'))
 
-        #log in gegevens
-        try:
-            database = Database('./databases/database.db')
-            cursor, conn = database.connect_db()
+        user_model = User()
+        user = user_model.login_user(login, password)
 
-            # login and password check
-            cursor.execute('SELECT * FROM users WHERE login=? and password=?', (login, password))
-            user = cursor.fetchone()
+        if user:
+            session['user_id'] = user['user_id']
+            session['username'] = user['login']
+            session["admin"] = user["is_admin"] == 1
 
-            conn.close()
-
-            # --
-            if user:
-                session['user_id'] = user['user_id']
-                session['username'] = user['login']
-                session["admin"] = user["is_admin"] == 1
-
-                flash('Logged in successfully!', 'success')
-                return redirect(url_for('toetsvragenScherm'))
-            else:
-                flash('Incorrect login or password, please try again.', 'danger')
-                return redirect(url_for('login_screen'))
-
-        except Exception as e:
-            flash(f"An Error occurred: {e}", "danger")
+            flash('Logged in successfully!', 'success')
+            return redirect(url_for('toetsvragenScherm'))
+        else:
+            flash('Incorrect login or password, please try again.', 'danger')
             return redirect(url_for('login_screen'))
 
     return render_template("login_screen.html")
